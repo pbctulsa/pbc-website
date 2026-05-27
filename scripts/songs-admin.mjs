@@ -123,7 +123,7 @@ async function formatLyrics(id, shouldWrite) {
 
   const { data, error } = await supabase
     .from(table)
-    .select('id,title,lyrics_text')
+    .select('id,title,lyrics_text,song_key')
     .eq('id', id)
     .single();
 
@@ -131,7 +131,7 @@ async function formatLyrics(id, shouldWrite) {
     fail(formatSupabaseError(error));
   }
 
-  const formatted = formatForProPresenter(data.lyrics_text || '');
+  const formatted = formatForProPresenter(data.title, data.lyrics_text || '');
 
   if (!shouldWrite) {
     console.log(`# ${data.title}`);
@@ -156,19 +156,30 @@ async function formatLyrics(id, shouldWrite) {
   console.log(`Updated lyrics_text for ${updated.title}`);
 }
 
-function formatForProPresenter(rawLyrics) {
+function formatForProPresenter(title, rawLyrics) {
   const metadataPattern = /^(doh\s+is|key\s*:|bpm\s*:|ccli\s*:)/i;
-  const lines = rawLyrics
+  const titleText = normalizeSongTitle(title);
+  const metadata = [];
+  const lyricLines = [];
+  const rawLines = rawLyrics
     .replace(/\r\n?/g, '\n')
     .split('\n')
     .map((line) => line.trim())
-    .filter(Boolean)
-    .filter((line) => !metadataPattern.test(line));
+    .filter(Boolean);
+
+  for (const line of rawLines) {
+    if (metadataPattern.test(line)) {
+      metadata.push(line);
+      continue;
+    }
+
+    lyricLines.push(line);
+  }
 
   const sections = [];
   let current = null;
 
-  for (const line of lines) {
+  for (const line of lyricLines) {
     const verseMatch = line.match(/^(\d+)[.)]\s*(.*)$/);
 
     if (verseMatch) {
@@ -206,7 +217,7 @@ function formatForProPresenter(rawLyrics) {
 
     for (let index = 0; index < section.lines.length; index += 4) {
       const chunk = section.lines.slice(index, index + 4);
-      const label = section.label === 'Verse 1' && index === 4 ? 'Chorus' : section.label;
+      const label = section.label === 'Verse 1' && index > 0 ? 'Chorus' : section.label;
 
       normalizedSections.push({
         label,
@@ -215,9 +226,19 @@ function formatForProPresenter(rawLyrics) {
     }
   }
 
-  return normalizedSections
-    .map((section) => [section.label, '', ...section.lines].join('\n'))
+  const header = [titleText, ...metadata].filter(Boolean).join('\n');
+  const body = normalizedSections
+    .map((section) => [section.label, ...section.lines].join('\n'))
     .join('\n\n');
+
+  return [header, body].filter(Boolean).join('\n\n');
+}
+
+function normalizeSongTitle(title) {
+  return String(title || '')
+    .replace(/^\s*\d+[.)]?\s*/, '')
+    .trim()
+    .toUpperCase();
 }
 
 function loadDotenv() {
