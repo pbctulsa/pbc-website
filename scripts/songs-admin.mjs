@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { readFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 
 loadDotenv();
 
@@ -39,6 +39,9 @@ switch (command) {
     break;
   case 'format-lyrics':
     await formatLyrics(args[0], args.includes('--write'));
+    break;
+  case 'format-all-lyrics':
+    await formatAllLyrics(args.includes('--write'));
     break;
   default:
     printUsage();
@@ -156,13 +159,114 @@ async function formatLyrics(id, shouldWrite) {
   console.log(`Updated lyrics_text for ${updated.title}`);
 }
 
+async function formatAllLyrics(shouldWrite) {
+  const songs = await fetchAllSongsForFormatting();
+  const changes = songs
+    .map((song) => ({
+      ...song,
+      formatted: formatForProPresenter(song.title, song.lyrics_text || '')
+    }))
+    .filter((song) => song.lyrics_text !== song.formatted);
+
+  console.log(`${songs.length} songs scanned.`);
+  console.log(`${changes.length} songs need lyrics_text formatting.`);
+
+  if (changes.length === 0) {
+    return;
+  }
+
+  const backupPath = writeLyricsBackup(changes);
+  console.log(`Backup written to ${backupPath}`);
+
+  console.log('\nPreview of first changed song:\n');
+  console.log(`# ${changes[0].title}`);
+  console.log('');
+  console.log(changes[0].formatted);
+
+  if (!shouldWrite) {
+    console.log('\nDry run only. Add --write to update all changed rows in Supabase.');
+    return;
+  }
+
+  for (let index = 0; index < changes.length; index += 1) {
+    const song = changes[index];
+    const { error } = await supabase
+      .from(table)
+      .update({ lyrics_text: song.formatted })
+      .eq('id', song.id);
+
+    if (error) {
+      fail(`Stopped at ${index + 1}/${changes.length} (${song.id}): ${formatSupabaseError(error)}`);
+    }
+
+    if ((index + 1) % 50 === 0 || index + 1 === changes.length) {
+      console.log(`Updated ${index + 1}/${changes.length}`);
+    }
+  }
+
+  console.log(`Formatted ${changes.length} songs.`);
+}
+
+async function fetchAllSongsForFormatting() {
+  const pageSize = 1000;
+  const songs = [];
+  let page = 0;
+
+  while (true) {
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+    const { data, error } = await supabase
+      .from(table)
+      .select('id,title,lyrics_text')
+      .order('song_number', { ascending: true })
+      .range(from, to);
+
+    if (error) {
+      fail(formatSupabaseError(error));
+    }
+
+    songs.push(...(data ?? []));
+
+    if (!data || data.length < pageSize) {
+      break;
+    }
+
+    page += 1;
+  }
+
+  return songs;
+}
+
+function writeLyricsBackup(changes) {
+  mkdirSync('backups', { recursive: true });
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const path = `backups/song-lyrics-${timestamp}.json`;
+  const payload = changes.map((song) => ({
+    id: song.id,
+    title: song.title,
+    oldLyricsText: song.lyrics_text,
+    newLyricsText: song.formatted
+  }));
+
+  writeFileSync(path, JSON.stringify(payload, null, 2));
+  return path;
+}
+
 function formatForProPresenter(title, rawLyrics) {
   const metadataPattern = /^(doh\s+is|key\s*:|bpm\s*:|ccli\s*:)/i;
   const titleText = normalizeSongTitle(title);
+  const normalizedRawLyrics = rawLyrics.replace(/\r\n?/g, '\n').trim();
+  const alreadyFormatted = normalizedRawLyrics
+    .split('\n')
+    .some((line) => /^(Verse\s+\d+|Chorus)$/i.test(line.trim()));
+
+  if (alreadyFormatted) {
+    return normalizedRawLyrics;
+  }
+
   const metadata = [];
   const lyricLines = [];
-  const rawLines = rawLyrics
-    .replace(/\r\n?/g, '\n')
+  const rawLines = normalizedRawLyrics
     .split('\n')
     .map((line) => line.trim())
     .filter(Boolean);
@@ -281,6 +385,8 @@ Usage:
   npm run songs:admin -- update <song-id> '{"title":"New Title"}'
   npm run songs:admin -- format-lyrics <song-id>
   npm run songs:admin -- format-lyrics <song-id> --write
+  npm run songs:admin -- format-all-lyrics
+  npm run songs:admin -- format-all-lyrics --write
 `);
 }
 
