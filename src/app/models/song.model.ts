@@ -5,5 +5,6 @@ export interface Song {
   author?: string;
   category?: string;
   lyrics?: string;
+  source?: string;
   created_at?: string;
 }

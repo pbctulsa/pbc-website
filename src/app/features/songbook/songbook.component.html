@@ -2,25 +2,40 @@
   <div class="section-inner">
     <p class="eyebrow">Church Songbook</p>
     <h1 class="section-title">PBC Songbook</h1>
-    <p class="lead">Search by title, number, author, or song type. The current website lists 1,171 songs.</p>
+    <p class="lead">Search by title, number, author, song type, or lyrics.</p>
 
     <div class="songbook-summary">
-      <span>{{ currentType() }}</span>
+      <span>{{ selectedType() }}</span>
       <strong>{{ filteredSongs().length }} shown</strong>
+      <strong>{{ totalSongs() || songs().length }} total</strong>
     </div>
 
-    <label class="search-field">
-      <span>Search songs</span>
-      <input
-        type="search"
-        [ngModel]="searchTerm()"
-        (ngModelChange)="updateSearchTerm($event)"
-        placeholder="Ka Hatna Pakai"
-      >
-    </label>
+    <div class="songbook-controls">
+      <label class="search-field">
+        <span>Search songs</span>
+        <input
+          type="search"
+          [ngModel]="searchTerm()"
+          (ngModelChange)="updateSearchTerm($event)"
+          placeholder="Ka Hatna Pakai"
+        >
+      </label>
+
+      <label class="type-field">
+        <span>Song type</span>
+        <select [ngModel]="selectedType()" (ngModelChange)="updateSelectedType($event)">
+          <option *ngFor="let type of songTypes()" [value]="type">{{ type }}</option>
+        </select>
+      </label>
+
+      <button type="button" (click)="clearFilters()">Clear</button>
+    </div>
 
     <p class="status" *ngIf="isLoading()">Loading songbook...</p>
     <p class="status warning" *ngIf="errorMessage()">{{ errorMessage() }}</p>
+    <p class="status" *ngIf="!isLoading() && !errorMessage() && filteredSongs().length === 0">
+      No songs match the current search.
+    </p>
 
     <div class="song-list">
       <a class="song-row" *ngFor="let song of filteredSongs()" [routerLink]="['/songbook', song.id]">

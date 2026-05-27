@@ -17,6 +17,7 @@ export class SongDetailComponent {
 
   protected readonly song = signal<Song | null>(null);
   protected readonly errorMessage = signal('');
+  protected readonly isLoading = signal(true);
 
   constructor() {
     void this.loadSong();
@@ -27,6 +28,7 @@ export class SongDetailComponent {
 
     if (!id) {
       this.errorMessage.set('Song not found.');
+      this.isLoading.set(false);
       return;
     }
 
@@ -37,13 +39,11 @@ export class SongDetailComponent {
       if (!song) {
         this.errorMessage.set('Song not found.');
       }
-    } catch {
-      this.song.set({
-        id,
-        title: 'PBC Songbook Sample',
-        lyrics: 'Configure Supabase to display the selected PBC song lyrics here.'
-      });
-      this.errorMessage.set('Supabase is not configured yet.');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unable to load this song from Supabase.';
+      this.errorMessage.set(message);
+    } finally {
+      this.isLoading.set(false);
     }
   }
 }

@@ -3,7 +3,7 @@
     <a class="back-link" routerLink="/songbook">Back to Songbook</a>
 
     <p class="eyebrow">Song Detail</p>
-    <h1 class="section-title">{{ song()?.title || 'Loading song...' }}</h1>
+    <h1 class="section-title">{{ song()?.title || (isLoading() ? 'Loading song...' : 'Song unavailable') }}</h1>
 
     <p class="status warning" *ngIf="errorMessage()">{{ errorMessage() }}</p>
 
@@ -20,8 +20,16 @@
         <dt>Category</dt>
         <dd>{{ selectedSong.category }}</dd>
       </div>
+      <div *ngIf="selectedSong.source">
+        <dt>Source</dt>
+        <dd>{{ selectedSong.source }}</dd>
+      </div>
     </dl>
 
-    <pre *ngIf="song()?.lyrics" class="lyrics">{{ song()?.lyrics }}</pre>
+    <pre *ngIf="song()?.lyrics; else noLyrics" class="lyrics">{{ song()?.lyrics }}</pre>
+
+    <ng-template #noLyrics>
+      <p class="status" *ngIf="song()">Lyrics are not available for this song yet.</p>
+    </ng-template>
   </article>
 </section>
