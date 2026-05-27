@@ -8,6 +8,7 @@
     "build": "ng build",
     "build:gh-pages": "ng build --configuration production --base-href /pbc-website/ && cp dist/pbc-website/browser/index.html dist/pbc-website/browser/404.html",
     "deploy:gh-pages": "npm run build:gh-pages && npx angular-cli-ghpages --dir=dist/pbc-website/browser",
+    "songs:admin": "node scripts/songs-admin.mjs",
     "watch": "ng build --watch --configuration development"
   },
   "dependencies": {
