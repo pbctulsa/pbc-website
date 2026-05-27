@@ -17,8 +17,12 @@
         <dd>{{ selectedSong.author }}</dd>
       </div>
       <div *ngIf="selectedSong.category">
-        <dt>Category</dt>
+        <dt>Book</dt>
         <dd>{{ selectedSong.category }}</dd>
+      </div>
+      <div *ngIf="selectedSong.songKey">
+        <dt>Key</dt>
+        <dd>{{ selectedSong.songKey }}</dd>
       </div>
       <div *ngIf="selectedSong.source">
         <dt>Source</dt>

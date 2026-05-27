@@ -98,8 +98,10 @@ export class SupabaseService {
       title,
       number: this.firstNumber(row, ['number', 'song_number', 'song_no', 'hymn_number']),
       author: this.firstString(row, ['author', 'artist', 'writer', 'composer']),
-      category: this.firstString(row, ['category', 'song_type', 'songType', 'type']),
-      lyrics: this.firstString(row, ['lyrics', 'song_lyrics', 'body', 'content', 'text']),
+      category: this.firstString(row, ['category', 'book', 'song_type', 'songType', 'type']),
+      lyrics: this.firstString(row, ['lyrics_text', 'lyrics', 'song_lyrics', 'body', 'content', 'text']),
+      lyricsHtml: this.firstString(row, ['lyrics_html', 'lyricsHtml']),
+      songKey: this.firstString(row, ['song_key', 'key']),
       source: this.firstString(row, ['source', 'resource']),
       created_at: this.firstString(row, ['created_at', 'createdAt'])
     };
