@@ -1,4 +1,13 @@
 <section class="hero">
+  <div class="hero-background" aria-hidden="true">
+    <img
+      *ngFor="let photo of church.photos; let index = index"
+      [src]="photo.src"
+      [alt]=""
+      [style.animation-delay]="index * 5 + 's'"
+    >
+  </div>
+
   <div class="hero-inner">
     <p class="eyebrow">Welcome</p>
     <h1>{{ church.name }}</h1>
@@ -49,25 +58,6 @@
       <h2>2025-2027 Leadership</h2>
       <p>View current church staff, departments, and rotating leadership terms.</p>
     </article>
-  </div>
-</section>
-
-<section class="photo-band" aria-labelledby="church-life-title">
-  <div class="section-inner">
-    <div class="photo-heading">
-      <div>
-        <p class="eyebrow">Church Life</p>
-        <h2 id="church-life-title">A glimpse of worship and fellowship</h2>
-      </div>
-      <a [href]="church.links.facebook" target="_blank" rel="noreferrer">See more on Facebook</a>
-    </div>
-
-    <div class="photo-grid">
-      <figure *ngFor="let photo of church.photos">
-        <img [src]="photo.src" [alt]="photo.alt" loading="lazy">
-        <figcaption>{{ photo.title }}</figcaption>
-      </figure>
-    </div>
   </div>
 </section>
 

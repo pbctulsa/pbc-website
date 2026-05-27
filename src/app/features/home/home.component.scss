@@ -1,15 +1,42 @@
 .hero {
+  position: relative;
+  overflow: hidden;
   display: grid;
   min-height: 54vh;
   place-items: center;
   padding: 4rem 1rem;
-  background:
-    linear-gradient(90deg, rgba(20, 50, 92, 0.94), rgba(20, 50, 92, 0.74)),
-    linear-gradient(135deg, #f7f9fc 0%, #dfe8f6 100%);
+  background: var(--color-blue-900);
   color: var(--color-white);
 }
 
+.hero::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  background:
+    linear-gradient(90deg, rgba(20, 50, 92, 0.94), rgba(20, 50, 92, 0.76)),
+    linear-gradient(180deg, rgba(20, 50, 92, 0.12), rgba(20, 50, 92, 0.5));
+}
+
+.hero-background {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-background img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.04);
+  animation: hero-fade 15s infinite;
+}
+
 .hero-inner {
+  position: relative;
+  z-index: 1;
   width: min(100%, var(--layout-max));
 }
 
@@ -100,65 +127,6 @@ h2 {
   color: var(--color-muted);
 }
 
-.photo-band {
-  padding: clamp(2rem, 5vw, 4rem) 1rem;
-  background: var(--color-blue-900);
-  color: var(--color-white);
-}
-
-.photo-heading {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  margin-bottom: 1.5rem;
-  gap: 1rem;
-}
-
-.photo-heading h2 {
-  margin: 0;
-  font-family: var(--font-serif);
-  font-size: clamp(2rem, 4vw, 3.2rem);
-  line-height: 1.1;
-}
-
-.photo-heading .eyebrow {
-  color: var(--color-white);
-}
-
-.photo-heading a {
-  flex: 0 0 auto;
-  color: var(--color-white);
-  font-weight: 800;
-  text-decoration-color: var(--color-red-600);
-  text-underline-offset: 0.2rem;
-}
-
-.photo-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-}
-
-figure {
-  overflow: hidden;
-  min-width: 0;
-  margin: 0;
-  border-radius: 0.5rem;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-figure img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-}
-
-figcaption {
-  padding: 0.8rem 1rem;
-  font-weight: 800;
-}
-
 .visit-band {
   background: var(--color-surface);
 }
@@ -201,20 +169,29 @@ figcaption {
     grid-template-columns: 1fr;
   }
 
-  .photo-heading {
-    align-items: start;
-    flex-direction: column;
-  }
-
-  .photo-grid {
-    grid-template-columns: 1fr;
-  }
-
   .visit-grid {
     grid-template-columns: 1fr;
   }
 
   .video-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@keyframes hero-fade {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+
+  8%,
+  30% {
+    opacity: 1;
+  }
+
+  42% {
+    opacity: 0;
+    transform: scale(1.1);
   }
 }
