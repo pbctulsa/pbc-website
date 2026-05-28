@@ -69,3 +69,9 @@ create policy "Published staff terms are publicly readable"
         and staff.is_published = true
     )
   );
+
+grant usage on schema public to anon, authenticated, service_role;
+grant select on public.staff to anon, authenticated;
+grant select on public.staff_terms to anon, authenticated;
+grant select, insert, update, delete on public.staff to service_role;
+grant select, insert, update, delete on public.staff_terms to service_role;
