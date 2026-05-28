@@ -112,13 +112,11 @@ export class StaffComponent implements OnInit {
   );
 
   protected termLabel(member: StaffMember): string {
-    const order = member.order ? `Order ${member.order}` : '';
-
     if (!member.termStartYear || !member.termEndYear) {
-      return order || 'Ongoing';
+      return 'Ongoing';
     }
 
-    return order ? `${order} • ${member.termStartYear}-${member.termEndYear}` : `${member.termStartYear}-${member.termEndYear}`;
+    return `${member.termStartYear}-${member.termEndYear}`;
   }
 
   protected phoneHref(phone: string): string {

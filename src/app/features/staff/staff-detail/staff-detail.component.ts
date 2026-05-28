@@ -24,13 +24,11 @@ export class StaffDetailComponent {
   }
 
   protected termLabel(term: StaffTerm): string {
-    const order = term.order ? `Order ${term.order}` : '';
-
     if (!term.termStartYear || !term.termEndYear) {
-      return order || (term.isCurrent ? 'Current' : 'Ongoing');
+      return term.isCurrent ? 'Current' : 'Ongoing';
     }
 
-    return order ? `${order} • ${term.termStartYear}-${term.termEndYear}` : `${term.termStartYear}-${term.termEndYear}`;
+    return `${term.termStartYear}-${term.termEndYear}`;
   }
 
   protected phoneHref(phone: string): string {
