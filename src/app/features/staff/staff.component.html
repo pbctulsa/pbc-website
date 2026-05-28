@@ -33,6 +33,7 @@
             <div class="departments" *ngIf="departmentLabels(member).length">
               <span class="department-chip" *ngFor="let label of departmentLabels(member)">{{ label }}</span>
             </div>
+            <p class="email" *ngIf="member.email">{{ member.email }}</p>
           </div>
         </a>
       </div>

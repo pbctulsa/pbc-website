@@ -53,6 +53,7 @@ h3 {
   display: grid;
   grid-template-columns: 5.5rem minmax(0, 1fr);
   align-items: start;
+  min-height: 13rem;
   padding: 1.15rem;
   gap: 1rem;
 }
@@ -127,6 +128,13 @@ p {
   color: var(--color-blue-900);
   font-size: 0.85rem;
   font-weight: 700;
+}
+
+.email {
+  margin-top: 0.6rem;
+  color: var(--color-muted);
+  font-size: 0.92rem;
+  overflow-wrap: anywhere;
 }
 
 .status {
