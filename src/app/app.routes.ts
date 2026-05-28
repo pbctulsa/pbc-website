@@ -37,6 +37,16 @@ export const routes: Routes = [
     title: 'Staff Profile | PBC'
   },
   {
+    path: 'ministries',
+    loadComponent: () => import('./features/ministries/ministries.component').then((m) => m.MinistriesComponent),
+    title: 'Ministries | PBC'
+  },
+  {
+    path: 'ministries/:slug',
+    loadComponent: () => import('./features/ministries/ministries.component').then((m) => m.MinistriesComponent),
+    title: 'Ministry | PBC'
+  },
+  {
     path: 'about',
     loadComponent: () => import('./features/about/about.component').then((m) => m.AboutComponent),
     title: 'About | PBC'

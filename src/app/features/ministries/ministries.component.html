@@ -1,0 +1,57 @@
+<section class="page-section">
+  <div class="section-inner ministries-page">
+    <p class="eyebrow">Ministries</p>
+    <h1 class="section-title">Church ministries</h1>
+
+    <ng-container *ngIf="selectedMinistry() as ministry; else overview">
+      <a class="back-link" routerLink="/ministries">Back to ministries</a>
+
+      <div class="ministry-detail">
+        <img class="detail-image" [src]="ministry.image.src" [alt]="ministry.image.alt" loading="lazy">
+
+        <div class="detail-copy">
+          <p class="lead">{{ ministry.subtitle }}</p>
+          <p class="detail-summary">{{ ministry.summary }}</p>
+          <p class="detail-overview">{{ ministry.overview }}</p>
+
+          <section class="focus-band">
+            <h2>Bylaw focus</h2>
+            <ul>
+              <li *ngFor="let item of ministry.bylawFocus">{{ item }}</li>
+            </ul>
+          </section>
+
+          <section class="emphasis-band">
+            <h2>What this ministry emphasizes</h2>
+            <div class="tag-list">
+              <span *ngFor="let item of ministry.emphasis">{{ item }}</span>
+            </div>
+          </section>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #overview>
+      <p class="status warning" *ngIf="isInvalidSlug()">
+        Ministry not found.
+      </p>
+
+      <ng-container *ngIf="!isInvalidSlug()">
+      <p class="lead">
+        These ministries are organized to help our church live out the Gospel through worship, teaching,
+        fellowship, service, and discipleship.
+      </p>
+
+      <div class="ministry-grid">
+        <a class="ministry-card" *ngFor="let ministry of ministries" [routerLink]="selectMinistryPath(ministry.slug)">
+          <img [src]="ministry.image.src" [alt]="ministry.image.alt" loading="lazy">
+          <div>
+            <h2>{{ ministry.title }}</h2>
+            <p>{{ ministry.subtitle }}</p>
+          </div>
+        </a>
+      </div>
+      </ng-container>
+    </ng-template>
+  </div>
+</section>

@@ -24,6 +24,17 @@ export class NavbarComponent {
     { label: 'Home', path: '/' },
     { label: 'Songbook', path: '/songbook' },
     {
+      label: 'Ministries',
+      path: '/ministries',
+      children: [
+        { label: 'Overview', path: '/ministries' },
+        { label: 'Men', path: '/ministries/men' },
+        { label: 'Women', path: '/ministries/women' },
+        { label: 'Youth', path: '/ministries/youth' },
+        { label: 'Children', path: '/ministries/children' }
+      ]
+    },
+    {
       label: 'About',
       path: '/about',
       children: [
