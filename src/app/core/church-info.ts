@@ -13,19 +13,57 @@ export const churchInfo = {
   ],
   photos: [
     {
-      src: 'images/687156666_1261870276101809_669626852360092061_n.jpg',
-      alt: 'Peniel Baptist Church worship leader singing during service',
+      src: 'images/church-pics/PHOTO-2025-02-09-18-54-27.jpg',
+      alt: 'Peniel Baptist Church congregation gathered for worship',
       title: 'Worship'
     },
     {
-      src: 'images/688635082_1261870286101808_4743110680737030896_n.jpg',
-      alt: 'Peniel Baptist Church pastor preaching from the pulpit',
+      src: 'images/church-pics/WhatsApp Image 2025-07-20 at 01.36.29.jpeg',
+      alt: 'Peniel Baptist Church worship service',
       title: 'Preaching'
     },
     {
-      src: 'images/689360299_1261870219435148_7023988842433850567_n.jpg',
-      alt: 'Peniel Baptist Church worship leader playing guitar',
+      src: 'images/church-pics/IMG_1020-Edit.jpg',
+      alt: 'Peniel Baptist Church gathering',
       title: 'Praise'
+    }
+  ],
+  gallery: [
+    {
+      src: 'images/church-pics/IMG_1020-Edit.jpg',
+      alt: 'Peniel Baptist Church worship gathering'
+    },
+    {
+      src: 'images/church-pics/IMG_1033-Edit.jpg',
+      alt: 'Peniel Baptist Church church family'
+    },
+    {
+      src: 'images/church-pics/IMG_1050-Edit.jpg',
+      alt: 'Peniel Baptist Church worship team'
+    },
+    {
+      src: 'images/church-pics/122148129722759607.jpg',
+      alt: 'Peniel Baptist Church congregation'
+    },
+    {
+      src: 'images/church-pics/122153676620759607.jpg',
+      alt: 'Peniel Baptist Church community moment'
+    },
+    {
+      src: 'images/church-pics/122162793866759607.jpg',
+      alt: 'Peniel Baptist Church church event'
+    },
+    {
+      src: 'images/church-pics/935647898724050.jpg',
+      alt: 'Peniel Baptist Church fellowship'
+    },
+    {
+      src: 'images/church-pics/940327744922732.jpg',
+      alt: 'Peniel Baptist Church worship service'
+    },
+    {
+      src: 'images/church-pics/1031755085779997.jpg',
+      alt: 'Peniel Baptist Church ministry gathering'
     }
   ],
   links: {

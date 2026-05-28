@@ -12,6 +12,7 @@ import { churchInfo } from '@core/church-info';
         <p class="lead">
           Use this page for sermon archives, livestream embeds, podcast links, and worship media.
         </p>
+        <img class="sermons-photo" [src]="church.gallery[1].src" [alt]="church.gallery[1].alt" loading="lazy">
 
         <div class="media-actions">
           <a class="button-link" [href]="church.links.youtube" target="_blank" rel="noreferrer">YouTube</a>
@@ -28,6 +29,15 @@ import { churchInfo } from '@core/church-info';
         flex-wrap: wrap;
         margin-top: 2rem;
         gap: 0.75rem;
+      }
+
+      .sermons-photo {
+        display: block;
+        width: 100%;
+        margin-top: 1.5rem;
+        border-radius: 0.5rem;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
       }
     `
   ]

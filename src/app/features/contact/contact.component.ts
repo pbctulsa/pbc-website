@@ -11,6 +11,7 @@ import { churchInfo } from '@core/church-info';
       <div class="section-inner">
         <p class="eyebrow">Contact</p>
         <h1 class="section-title">Visit or contact {{ church.shortName }}</h1>
+        <img class="contact-photo" [src]="church.gallery[8].src" [alt]="church.gallery[8].alt" loading="lazy">
 
         <div class="contact-grid">
           <article>
@@ -44,6 +45,15 @@ import { churchInfo } from '@core/church-info';
         grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
         margin-top: 2rem;
         gap: 1rem;
+      }
+
+      .contact-photo {
+        display: block;
+        width: 100%;
+        margin-top: 1.5rem;
+        border-radius: 0.5rem;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
       }
 
       article {
