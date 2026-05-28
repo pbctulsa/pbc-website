@@ -1,0 +1,50 @@
+<section class="page-section">
+  <article class="section-inner staff-detail">
+    <a class="back-link" routerLink="/about/staff">Back to Staff</a>
+
+    <p class="eyebrow">Staff Profile</p>
+    <h1 class="section-title">{{ staff()?.name || (isLoading() ? 'Loading profile...' : 'Profile unavailable') }}</h1>
+
+    <p class="status warning" *ngIf="errorMessage()">{{ errorMessage() }}</p>
+
+    <div class="detail-layout" *ngIf="staff() as member">
+      <div class="photo-wrap">
+        <img *ngIf="member.photoUrl; else initials" class="staff-photo" [src]="member.photoUrl" [alt]="member.name" loading="lazy">
+        <ng-template #initials>
+          <div class="photo-placeholder" aria-hidden="true">{{ member.name.charAt(0) }}</div>
+        </ng-template>
+      </div>
+
+      <div class="detail-copy">
+        <p class="role">{{ member.role }}</p>
+        <p class="department">{{ member.department }}</p>
+        <p class="term">{{ termLabel(member.terms?.[0] || { role: member.role, isCurrent: true }) }}</p>
+
+        <div class="contact-list">
+          <a *ngIf="member.email" [href]="'mailto:' + member.email">{{ member.email }}</a>
+          <a *ngIf="member.phone" [href]="phoneHref(member.phone)">{{ member.phone }}</a>
+        </div>
+
+        <p class="bylaw" *ngIf="member.bylaw">{{ member.bylaw }}</p>
+
+        <section class="bio-section">
+          <h2>Biography</h2>
+          <p>{{ member.bio || 'Bio not available yet.' }}</p>
+        </section>
+
+        <section class="history-section" *ngIf="member.terms?.length">
+          <h2>Term history</h2>
+          <ul>
+            <li *ngFor="let term of member.terms">
+              <strong>{{ term.role }}</strong>
+              <span>
+                {{ term.department || 'No department' }}
+                <em>{{ termLabel(term) }}</em>
+              </span>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </article>
+</section>

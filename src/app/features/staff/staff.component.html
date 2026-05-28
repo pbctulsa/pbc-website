@@ -22,10 +22,7 @@
             <p class="bylaw" *ngIf="member.bylaw">{{ member.bylaw }}</p>
             <a *ngIf="member.email" [href]="'mailto:' + member.email">{{ member.email }}</a>
             <a *ngIf="member.phone" [href]="phoneHref(member.phone)">{{ member.phone }}</a>
-            <button *ngIf="member.bio" class="bio-toggle" type="button" (click)="toggleBio(member.id)">
-              {{ isBioExpanded(member.id) ? 'Hide bio' : 'Read bio' }}
-            </button>
-            <p class="bio" *ngIf="member.bio && isBioExpanded(member.id)">{{ member.bio }}</p>
+            <a class="bio-link" *ngIf="member.bio" [routerLink]="['/about/staff', member.id]">Read bio</a>
           </div>
         </article>
       </div>

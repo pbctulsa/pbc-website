@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '@environments/environment';
-import { StaffMember } from '@models/staff-member.model';
+import { StaffMember, StaffTerm } from '@models/staff-member.model';
 import { Song } from '@models/song.model';
 
 type SongRow = Record<string, unknown>;
@@ -80,7 +80,7 @@ export class SupabaseService {
   async getStaff(): Promise<StaffMember[]> {
     const { data, error } = await this.getClient()
       .from(this.staffTable)
-      .select('*,staff_terms(role,department,bylaw,term_start_year,term_end_year,is_current)')
+      .select(this.staffSelect())
       .eq('is_published', true)
       .order('sort_order', { ascending: true });
 
@@ -88,7 +88,22 @@ export class SupabaseService {
       throw error;
     }
 
-    return ((data ?? []) as StaffRow[]).map((row) => this.mapStaffRow(row));
+    return ((data ?? []) as unknown as StaffRow[]).map((row) => this.mapStaffRow(row));
+  }
+
+  async getStaffById(id: string): Promise<StaffMember | null> {
+    const { data, error } = await this.getClient()
+      .from(this.staffTable)
+      .select(this.staffSelect())
+      .eq('id', id)
+      .eq('is_published', true)
+      .maybeSingle();
+
+    if (error) {
+      throw error;
+    }
+
+    return data ? this.mapStaffRow(data as unknown as StaffRow) : null;
   }
 
   private getClient(): SupabaseClient {
@@ -158,8 +173,24 @@ export class SupabaseService {
       email: this.firstString(row, ['email']),
       phone: this.firstString(row, ['phone']),
       photoUrl: this.firstString(row, ['photo_url']),
-      bio: this.firstString(row, ['short_description', 'bio'])
+      bio: this.firstString(row, ['short_description', 'bio']),
+      terms: terms.map((term) => this.mapStaffTerm(term))
     };
+  }
+
+  private mapStaffTerm(row: StaffTermRow): StaffTerm {
+    return {
+      role: this.firstString(row, ['role']) || 'Staff',
+      department: this.firstString(row, ['department']),
+      bylaw: this.firstString(row, ['bylaw']),
+      termStartYear: this.firstNumber(row, ['term_start_year']),
+      termEndYear: this.firstNumber(row, ['term_end_year']),
+      isCurrent: row['is_current'] === true
+    };
+  }
+
+  private staffSelect(): string {
+    return '*,staff_terms(role,department,bylaw,term_start_year,term_end_year,is_current)';
   }
 
   private firstString(row: SongRow, keys: string[]): string | undefined {

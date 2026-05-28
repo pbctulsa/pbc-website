@@ -32,6 +32,11 @@ export const routes: Routes = [
     title: 'Staff | PBC'
   },
   {
+    path: 'about/staff/:id',
+    loadComponent: () => import('./features/staff/staff-detail/staff-detail.component').then((m) => m.StaffDetailComponent),
+    title: 'Staff Profile | PBC'
+  },
+  {
     path: 'about',
     loadComponent: () => import('./features/about/about.component').then((m) => m.AboutComponent),
     title: 'About | PBC'

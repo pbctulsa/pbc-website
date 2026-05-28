@@ -77,21 +77,9 @@ a {
   font-weight: 700;
 }
 
-.bio-toggle {
+.bio-link {
   display: inline-flex;
   margin-top: 0.4rem;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--color-red-700);
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.bio {
-  margin-top: 0.5rem;
-  white-space: pre-line;
 }
 
 .rotation-panel {
