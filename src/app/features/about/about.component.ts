@@ -96,8 +96,8 @@ import { churchInfo } from '@core/church-info';
     `
       .about-hero {
         display: grid;
-        grid-template-columns: 1.05fr 0.95fr;
-        align-items: stretch;
+        grid-template-columns: minmax(0, 1.25fr) minmax(16rem, 0.75fr);
+        align-items: start;
         margin-top: 1.5rem;
         gap: 2rem;
       }
@@ -111,7 +111,8 @@ import { churchInfo } from '@core/church-info';
       }
 
       .about-hero > img {
-        min-height: 26rem;
+        max-height: 22rem;
+        aspect-ratio: 4 / 3;
       }
 
       .mission-pair {
@@ -190,14 +191,15 @@ import { churchInfo } from '@core/church-info';
 
       .church-life {
         display: grid;
-        grid-template-columns: 0.9fr 1.1fr;
+        grid-template-columns: minmax(14rem, 0.65fr) minmax(0, 1.35fr);
         align-items: center;
         margin-top: 3rem;
         gap: 2rem;
       }
 
       .church-life > img {
-        aspect-ratio: 4 / 3;
+        max-height: 18rem;
+        aspect-ratio: 1 / 1;
       }
 
       .church-life p + p {
@@ -223,7 +225,7 @@ import { churchInfo } from '@core/church-info';
 
       .photo-grid {
         display: grid;
-        grid-template-columns: repeat(6, 1fr);
+        grid-template-columns: repeat(6, minmax(0, 1fr));
         margin-top: 1rem;
         gap: 0.75rem;
       }
@@ -235,8 +237,8 @@ import { churchInfo } from '@core/church-info';
 
       .photo-grid img:nth-child(1),
       .photo-grid img:nth-child(4) {
-        grid-column: span 2;
-        aspect-ratio: 4 / 3;
+        grid-column: span 1;
+        aspect-ratio: 1 / 1;
       }
 
       @media (max-width: 760px) {
@@ -259,7 +261,7 @@ import { churchInfo } from '@core/church-info';
         }
 
         .about-hero > img {
-          min-height: 18rem;
+          max-height: 18rem;
         }
       }
 
