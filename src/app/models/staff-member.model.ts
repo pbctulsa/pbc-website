@@ -3,6 +3,7 @@ export interface StaffMember {
   name: string;
   role: string;
   department?: string;
+  bylaw?: string;
   termStartYear?: number;
   termEndYear?: number;
   email?: string;

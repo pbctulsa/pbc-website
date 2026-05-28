@@ -3,6 +3,7 @@ export const environment = {
   supabase: {
     url: 'YOUR_SUPABASE_URL',
     anonKey: 'YOUR_SUPABASE_ANON_KEY',
-    songsTable: 'songs'
+    songsTable: 'songs',
+    staffTable: 'staff'
   }
 };

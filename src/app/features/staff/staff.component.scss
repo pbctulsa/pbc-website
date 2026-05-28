@@ -9,10 +9,14 @@
   gap: 1rem;
 }
 
-.photo-placeholder {
+.photo-placeholder,
+.staff-photo {
   display: grid;
   width: 4rem;
   height: 4rem;
+}
+
+.photo-placeholder {
   place-items: center;
   border-radius: 50%;
   background: var(--color-blue-900);
@@ -20,6 +24,11 @@
   font-family: var(--font-serif);
   font-size: 1.5rem;
   font-weight: 700;
+}
+
+.staff-photo {
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 h2 {
@@ -42,6 +51,16 @@ p {
 }
 
 .term {
+  color: var(--color-muted);
+  font-weight: 700;
+}
+
+.bylaw {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.status {
   color: var(--color-muted);
   font-weight: 700;
 }

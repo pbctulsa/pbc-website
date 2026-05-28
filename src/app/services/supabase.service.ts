@@ -1,9 +1,14 @@
 import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '@environments/environment';
+import { StaffMember } from '@models/staff-member.model';
 import { Song } from '@models/song.model';
 
 type SongRow = Record<string, unknown>;
+type StaffRow = Record<string, unknown> & {
+  staff_terms?: StaffTermRow[];
+};
+type StaffTermRow = Record<string, unknown>;
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +16,7 @@ type SongRow = Record<string, unknown>;
 export class SupabaseService {
   private client?: SupabaseClient;
   private readonly songsTable = environment.supabase.songsTable;
+  private readonly staffTable = environment.supabase.staffTable || 'staff';
 
   get supabase(): SupabaseClient {
     return this.getClient();
@@ -71,6 +77,20 @@ export class SupabaseService {
     return data ? this.mapSongRow(data) : null;
   }
 
+  async getStaff(): Promise<StaffMember[]> {
+    const { data, error } = await this.getClient()
+      .from(this.staffTable)
+      .select('*,staff_terms(role,department,bylaw,term_start_year,term_end_year,is_current)')
+      .eq('is_published', true)
+      .order('sort_order', { ascending: true });
+
+    if (error) {
+      throw error;
+    }
+
+    return ((data ?? []) as StaffRow[]).map((row) => this.mapStaffRow(row));
+  }
+
   private getClient(): SupabaseClient {
     if (this.client) {
       return this.client;
@@ -104,6 +124,40 @@ export class SupabaseService {
       songKey: this.firstString(row, ['song_key', 'key']),
       source: this.firstString(row, ['source', 'resource']),
       created_at: this.firstString(row, ['created_at', 'createdAt'])
+    };
+  }
+
+  private mapStaffRow(row: StaffRow): StaffMember {
+    const terms = Array.isArray(row.staff_terms)
+      ? [...row.staff_terms].sort((a, b) => {
+          const aCurrent = a['is_current'] === true ? 1 : 0;
+          const bCurrent = b['is_current'] === true ? 1 : 0;
+
+          if (aCurrent !== bCurrent) {
+            return bCurrent - aCurrent;
+          }
+
+          return (this.firstNumber(b, ['term_start_year']) || 0) - (this.firstNumber(a, ['term_start_year']) || 0);
+        })
+      : [];
+    const currentTerm =
+      terms.find((term) => term['is_current'] === true) ||
+      terms.find((term) => term['is_current'] !== false) ||
+      terms[0];
+    const name = this.firstString(row, ['name']) || 'Unnamed Staff Member';
+    const role = this.firstString(currentTerm || {}, ['role']) || 'Staff';
+
+    return {
+      id: this.firstString(row, ['id']) || name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+      name,
+      role,
+      department: this.firstString(currentTerm || {}, ['department']),
+      bylaw: this.firstString(currentTerm || {}, ['bylaw']),
+      termStartYear: this.firstNumber(currentTerm || {}, ['term_start_year']),
+      termEndYear: this.firstNumber(currentTerm || {}, ['term_end_year']),
+      email: this.firstString(row, ['email']),
+      photoUrl: this.firstString(row, ['photo_url']),
+      bio: this.firstString(row, ['short_description', 'bio'])
     };
   }
 

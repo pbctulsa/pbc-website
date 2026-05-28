@@ -1,6 +1,7 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { StaffMember } from '@models/staff-member.model';
+import { SupabaseService } from '@services/supabase.service';
 
 @Component({
   selector: 'app-staff',
@@ -9,8 +10,29 @@ import { StaffMember } from '@models/staff-member.model';
   templateUrl: './staff.component.html',
   styleUrl: './staff.component.scss'
 })
-export class StaffComponent {
-  protected readonly staff = signal<StaffMember[]>([
+export class StaffComponent implements OnInit {
+  private readonly supabaseService = inject(SupabaseService);
+  protected readonly isLoading = signal(true);
+  protected readonly error = signal<string | null>(null);
+  protected readonly staff = signal<StaffMember[]>(this.fallbackStaff());
+
+  async ngOnInit(): Promise<void> {
+    try {
+      const staff = await this.supabaseService.getStaff();
+
+      if (staff.length) {
+        this.staff.set(staff);
+      }
+    } catch (error) {
+      this.error.set('Showing local staff data until Supabase staff migration is complete.');
+      console.error(error);
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  private fallbackStaff(): StaffMember[] {
+    return [
     {
       id: 'pastor',
       name: 'Rev. Dr. Seikam Touthang',
@@ -80,7 +102,8 @@ export class StaffComponent {
       department: 'Individual Positions',
       email: 'jtouthang@pbctulsa.org'
     }
-  ]);
+    ];
+  }
 
   protected readonly rotatingLeaders = computed(() =>
     this.staff().filter((member) => member.termStartYear && member.termEndYear)
