@@ -160,6 +160,15 @@ export class StaffComponent implements OnInit {
       }
     }
 
+    if (!selectedDepartment && grouped.size === 0) {
+      return [
+        {
+          title: 'All Staff',
+          members: [...staff].sort((left, right) => this.compareStaff(left, right))
+        }
+      ];
+    }
+
     if (selectedDepartment && !grouped.has(selectedDepartment)) {
       return [];
     }
