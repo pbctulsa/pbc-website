@@ -15,9 +15,9 @@ import { churchInfo } from '@core/church-info';
         <div class="about-hero">
           <div>
             <p class="lead">
-              {{ church.shortName }} exists to glorify God by reaching and teaching the Gospel with
-              Jesus' love and compassion. We are a Baptist church in Tulsa shaped by worship,
-              evangelism, ministry, discipleship, and fellowship.
+              {{ church.community }} We exist to glorify God by reaching and teaching the Gospel
+              with Jesus' love and compassion, shaped by worship, evangelism, ministry,
+              discipleship, and fellowship.
             </p>
             <div class="mission-pair">
               <article>

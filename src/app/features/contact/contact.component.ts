@@ -11,6 +11,7 @@ import { churchInfo } from '@core/church-info';
       <div class="section-inner">
         <p class="eyebrow">Contact</p>
         <h1 class="section-title">Visit or contact {{ church.shortName }}</h1>
+        <p class="lead">{{ church.community }}</p>
         <img class="contact-photo" [src]="church.gallery[8].src" [alt]="church.gallery[8].alt" loading="lazy">
 
         <div class="contact-grid">
@@ -57,10 +58,18 @@ import { churchInfo } from '@core/church-info';
       .contact-photo {
         display: block;
         width: 100%;
-        margin-top: 1.5rem;
+        margin-top: 1rem;
         border-radius: 0.5rem;
         aspect-ratio: 16 / 7;
         object-fit: cover;
+      }
+
+      .lead {
+        max-width: 46rem;
+        margin: 0.75rem 0 0;
+        color: var(--color-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
       }
 
       article {
