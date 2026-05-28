@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 
 loadDotenv();
 
@@ -40,8 +40,8 @@ switch (command) {
   case 'format-lyrics':
     await formatLyrics(args[0], args.includes('--write'));
     break;
-  case 'format-all-lyrics':
-    await formatAllLyrics(args.includes('--write'));
+  case 'restore-lyrics-backup':
+    await restoreLyricsBackup(args[0], args.includes('--write'));
     break;
   default:
     printUsage();
@@ -159,97 +159,47 @@ async function formatLyrics(id, shouldWrite) {
   console.log(`Updated lyrics_text for ${updated.title}`);
 }
 
-async function formatAllLyrics(shouldWrite) {
-  const songs = await fetchAllSongsForFormatting();
-  const changes = songs
-    .map((song) => ({
-      ...song,
-      formatted: formatForProPresenter(song.title, song.lyrics_text || '')
-    }))
-    .filter((song) => song.lyrics_text !== song.formatted);
-
-  console.log(`${songs.length} songs scanned.`);
-  console.log(`${changes.length} songs need lyrics_text formatting.`);
-
-  if (changes.length === 0) {
-    return;
+async function restoreLyricsBackup(path, shouldWrite) {
+  if (!path) {
+    fail('Usage: npm run songs:admin -- restore-lyrics-backup <backup-path> [--write]');
   }
 
-  const backupPath = writeLyricsBackup(changes);
-  console.log(`Backup written to ${backupPath}`);
+  let rows;
+  try {
+    rows = JSON.parse(readFileSync(path, 'utf8'));
+  } catch (error) {
+    fail(`Could not read backup file: ${error.message}`);
+  }
 
-  console.log('\nPreview of first changed song:\n');
-  console.log(`# ${changes[0].title}`);
-  console.log('');
-  console.log(changes[0].formatted);
+  const restoreRows = rows.filter((row) => row.id && typeof row.oldLyricsText === 'string');
+  console.log(`${restoreRows.length} rows available to restore from ${path}`);
 
   if (!shouldWrite) {
-    console.log('\nDry run only. Add --write to update all changed rows in Supabase.');
+    console.log('\nPreview of first restored row:\n');
+    console.log(`# ${restoreRows[0]?.title || 'Unknown song'}`);
+    console.log('');
+    console.log((restoreRows[0]?.oldLyricsText || '').slice(0, 1000));
+    console.log('\nDry run only. Add --write to restore lyrics_text in Supabase.');
     return;
   }
 
-  for (let index = 0; index < changes.length; index += 1) {
-    const song = changes[index];
+  for (let index = 0; index < restoreRows.length; index += 1) {
+    const row = restoreRows[index];
     const { error } = await supabase
       .from(table)
-      .update({ lyrics_text: song.formatted })
-      .eq('id', song.id);
+      .update({ lyrics_text: row.oldLyricsText })
+      .eq('id', row.id);
 
     if (error) {
-      fail(`Stopped at ${index + 1}/${changes.length} (${song.id}): ${formatSupabaseError(error)}`);
+      fail(`Stopped at ${index + 1}/${restoreRows.length} (${row.id}): ${formatSupabaseError(error)}`);
     }
 
-    if ((index + 1) % 50 === 0 || index + 1 === changes.length) {
-      console.log(`Updated ${index + 1}/${changes.length}`);
+    if ((index + 1) % 50 === 0 || index + 1 === restoreRows.length) {
+      console.log(`Restored ${index + 1}/${restoreRows.length}`);
     }
   }
 
-  console.log(`Formatted ${changes.length} songs.`);
-}
-
-async function fetchAllSongsForFormatting() {
-  const pageSize = 1000;
-  const songs = [];
-  let page = 0;
-
-  while (true) {
-    const from = page * pageSize;
-    const to = from + pageSize - 1;
-    const { data, error } = await supabase
-      .from(table)
-      .select('id,title,lyrics_text')
-      .order('song_number', { ascending: true })
-      .range(from, to);
-
-    if (error) {
-      fail(formatSupabaseError(error));
-    }
-
-    songs.push(...(data ?? []));
-
-    if (!data || data.length < pageSize) {
-      break;
-    }
-
-    page += 1;
-  }
-
-  return songs;
-}
-
-function writeLyricsBackup(changes) {
-  mkdirSync('backups', { recursive: true });
-  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-  const path = `backups/song-lyrics-${timestamp}.json`;
-  const payload = changes.map((song) => ({
-    id: song.id,
-    title: song.title,
-    oldLyricsText: song.lyrics_text,
-    newLyricsText: song.formatted
-  }));
-
-  writeFileSync(path, JSON.stringify(payload, null, 2));
-  return path;
+  console.log(`Restored lyrics_text for ${restoreRows.length} songs.`);
 }
 
 function formatForProPresenter(title, rawLyrics) {
@@ -385,8 +335,8 @@ Usage:
   npm run songs:admin -- update <song-id> '{"title":"New Title"}'
   npm run songs:admin -- format-lyrics <song-id>
   npm run songs:admin -- format-lyrics <song-id> --write
-  npm run songs:admin -- format-all-lyrics
-  npm run songs:admin -- format-all-lyrics --write
+  npm run songs:admin -- restore-lyrics-backup <backup-path>
+  npm run songs:admin -- restore-lyrics-backup <backup-path> --write
 `);
 }
 
