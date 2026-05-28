@@ -25,6 +25,7 @@ create table if not exists public.staff_terms (
   role text not null,
   department text,
   bylaw text,
+  "order" integer not null default 0,
   term_start_year integer,
   term_end_year integer,
   is_current boolean not null default true,
@@ -37,7 +38,7 @@ create index if not exists staff_is_published_sort_order_idx
   on public.staff (is_published, sort_order, name);
 
 create index if not exists staff_terms_staff_id_idx
-  on public.staff_terms (staff_id, is_current, term_start_year, term_end_year);
+  on public.staff_terms (staff_id, "order", is_current, term_start_year, term_end_year);
 
 create unique index if not exists staff_terms_history_key_idx
   on public.staff_terms (

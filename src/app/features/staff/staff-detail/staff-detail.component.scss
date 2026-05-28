@@ -16,7 +16,7 @@
 
 .detail-layout {
   display: grid;
-  grid-template-columns: 10rem 1fr;
+  grid-template-columns: minmax(10rem, 12rem) minmax(0, 1fr);
   margin-top: 2rem;
   gap: 1.5rem;
 }
@@ -126,6 +126,15 @@
 .history-section em {
   font-style: normal;
   font-weight: 700;
+}
+
+.detail-copy a {
+  display: block;
+}
+
+.bio-section p,
+.history-section span {
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 720px) {

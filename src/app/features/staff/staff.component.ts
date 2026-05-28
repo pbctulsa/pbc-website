@@ -112,11 +112,13 @@ export class StaffComponent implements OnInit {
   );
 
   protected termLabel(member: StaffMember): string {
+    const order = member.order ? `Order ${member.order}` : '';
+
     if (!member.termStartYear || !member.termEndYear) {
-      return 'Ongoing';
+      return order || 'Ongoing';
     }
 
-    return `${member.termStartYear}-${member.termEndYear}`;
+    return order ? `${order} • ${member.termStartYear}-${member.termEndYear}` : `${member.termStartYear}-${member.termEndYear}`;
   }
 
   protected phoneHref(phone: string): string {
@@ -132,6 +134,10 @@ export class StaffComponent implements OnInit {
       const members = grouped.get(department) ?? [];
       members.push(member);
       grouped.set(department, members);
+    }
+
+    for (const members of grouped.values()) {
+      members.sort((left, right) => this.compareStaff(left, right));
     }
 
     const executive = grouped.get('Church Executive') ?? [];
@@ -153,5 +159,16 @@ export class StaffComponent implements OnInit {
   private normalizeDepartment(department?: string): string {
     const value = department?.trim();
     return value ? value : 'Other Ministries';
+  }
+
+  private compareStaff(left: StaffMember, right: StaffMember): number {
+    const leftOrder = left.order ?? Number.MAX_SAFE_INTEGER;
+    const rightOrder = right.order ?? Number.MAX_SAFE_INTEGER;
+
+    if (leftOrder !== rightOrder) {
+      return leftOrder - rightOrder;
+    }
+
+    return left.name.localeCompare(right.name);
   }
 }

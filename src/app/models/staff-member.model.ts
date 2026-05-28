@@ -4,6 +4,7 @@ export interface StaffTerm {
   bylaw?: string;
   termStartYear?: number;
   termEndYear?: number;
+  order?: number;
   isCurrent?: boolean;
 }
 
@@ -15,6 +16,7 @@ export interface StaffMember {
   bylaw?: string;
   termStartYear?: number;
   termEndYear?: number;
+  order?: number;
   email?: string;
   phone?: string;
   photoUrl?: string;

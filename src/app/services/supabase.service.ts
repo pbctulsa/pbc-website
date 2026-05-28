@@ -145,14 +145,21 @@ export class SupabaseService {
   private mapStaffRow(row: StaffRow): StaffMember {
     const terms = Array.isArray(row.staff_terms)
       ? [...row.staff_terms].sort((a, b) => {
-          const aCurrent = a['is_current'] === true ? 1 : 0;
-          const bCurrent = b['is_current'] === true ? 1 : 0;
+      const aOrder = this.firstNumber(a, ['order', 'term_order']) ?? Number.MAX_SAFE_INTEGER;
+      const bOrder = this.firstNumber(b, ['order', 'term_order']) ?? Number.MAX_SAFE_INTEGER;
 
-          if (aCurrent !== bCurrent) {
-            return bCurrent - aCurrent;
-          }
+      if (aOrder !== bOrder) {
+        return aOrder - bOrder;
+      }
 
-          return (this.firstNumber(b, ['term_start_year']) || 0) - (this.firstNumber(a, ['term_start_year']) || 0);
+      const aCurrent = a['is_current'] === true ? 1 : 0;
+      const bCurrent = b['is_current'] === true ? 1 : 0;
+
+      if (aCurrent !== bCurrent) {
+        return bCurrent - aCurrent;
+      }
+
+      return (this.firstNumber(b, ['term_start_year']) || 0) - (this.firstNumber(a, ['term_start_year']) || 0);
         })
       : [];
     const currentTerm =
@@ -170,6 +177,7 @@ export class SupabaseService {
       bylaw: this.firstString(currentTerm || {}, ['bylaw']),
       termStartYear: this.firstNumber(currentTerm || {}, ['term_start_year']),
       termEndYear: this.firstNumber(currentTerm || {}, ['term_end_year']),
+      order: this.firstNumber(currentTerm || {}, ['order', 'term_order']),
       email: this.firstString(row, ['email']),
       phone: this.firstString(row, ['phone']),
       photoUrl: this.firstString(row, ['photo_url']),
@@ -185,12 +193,13 @@ export class SupabaseService {
       bylaw: this.firstString(row, ['bylaw']),
       termStartYear: this.firstNumber(row, ['term_start_year']),
       termEndYear: this.firstNumber(row, ['term_end_year']),
+      order: this.firstNumber(row, ['order', 'term_order']),
       isCurrent: row['is_current'] === true
     };
   }
 
   private staffSelect(): string {
-    return '*,staff_terms(role,department,bylaw,term_start_year,term_end_year,is_current)';
+    return '*,staff_terms(role,department,bylaw,term_start_year,term_end_year,"order",is_current)';
   }
 
   private firstString(row: SongRow, keys: string[]): string | undefined {
