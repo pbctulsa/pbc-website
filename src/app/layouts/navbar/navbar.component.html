@@ -16,7 +16,7 @@
     </button>
 
     <ul id="primary-menu" class="nav-links" [class.open]="menuOpen()">
-      <li *ngFor="let item of navItems">
+      <li *ngFor="let item of navItems" [class.has-submenu]="item.children">
         <a
           [routerLink]="item.path"
           routerLinkActive="active"
@@ -25,6 +25,27 @@
         >
           {{ item.label }}
         </a>
+        <ul class="submenu" *ngIf="item.children">
+          <li *ngFor="let child of item.children">
+            <a
+              *ngIf="!child.external"
+              [routerLink]="child.path"
+              routerLinkActive="active"
+              (click)="closeMenu()"
+            >
+              {{ child.label }}
+            </a>
+            <a
+              *ngIf="child.external"
+              [href]="child.path"
+              target="_blank"
+              rel="noreferrer"
+              (click)="closeMenu()"
+            >
+              {{ child.label }}
+            </a>
+          </li>
+        </ul>
       </li>
     </ul>
 

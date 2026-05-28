@@ -23,6 +23,11 @@ export const routes: Routes = [
   },
   {
     path: 'staff',
+    redirectTo: 'about/staff',
+    pathMatch: 'full'
+  },
+  {
+    path: 'about/staff',
     loadComponent: () => import('./features/staff/staff.component').then((m) => m.StaffComponent),
     title: 'Staff | PBC'
   },

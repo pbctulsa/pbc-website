@@ -79,6 +79,7 @@ export const churchInfo = {
     youtube: 'https://www.youtube.com/@pbctulsa',
     youtubeUploadsEmbed: 'https://www.youtube.com/embed/videoseries?list=UUdFnaB_onPDQLjuhLj0KDkQ',
     podcast: 'https://podcast.pbctulsa.org/',
+    bylaws: 'docs/pbc-bylaws-final.pdf',
     bible: 'https://www.bible.com'
   },
   socialLinks: [

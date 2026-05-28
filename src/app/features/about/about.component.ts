@@ -76,6 +76,9 @@ import { churchInfo } from '@core/church-info';
             Convention, the Baptist General Convention of Oklahoma, and the Tulsa Metro Baptist
             Association.
           </p>
+          <a class="button-link" [href]="church.links.bylaws" target="_blank" rel="noreferrer">
+            Download Bylaws
+          </a>
         </section>
 
         <div class="photo-grid" aria-label="Church photo gallery">
@@ -212,6 +215,10 @@ import { churchInfo } from '@core/church-info';
         max-width: 58rem;
         color: var(--color-blue-900);
         font-weight: 800;
+      }
+
+      .affiliation-band .button-link {
+        margin-top: 1rem;
       }
 
       .photo-grid {
