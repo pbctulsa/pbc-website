@@ -39,7 +39,7 @@ export const churchInfo = {
     facebook: 'https://www.facebook.com/pbctulsa',
     instagram: 'https://www.instagram.com/pbctulsa',
     youtube: 'https://www.youtube.com/@pbctulsa',
-    youtubeUploadsEmbed: 'https://www.youtube.com/embed?listType=user_uploads&list=pbctulsa',
+    youtubeUploadsEmbed: 'https://www.youtube.com/embed/videoseries?list=UUdFnaB_onPDQLjuhLj0KDkQ',
     bible: 'https://www.bible.com'
   }
 } as const;
