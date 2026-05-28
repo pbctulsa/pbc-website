@@ -78,6 +78,25 @@ export const churchInfo = {
     instagram: 'https://www.instagram.com/pbctulsa',
     youtube: 'https://www.youtube.com/@pbctulsa',
     youtubeUploadsEmbed: 'https://www.youtube.com/embed/videoseries?list=UUdFnaB_onPDQLjuhLj0KDkQ',
+    podcast: 'https://podcast.pbctulsa.org/',
     bible: 'https://www.bible.com'
-  }
+  },
+  socialLinks: [
+    {
+      label: 'Instagram',
+      url: 'https://www.instagram.com/pbctulsa'
+    },
+    {
+      label: 'Facebook',
+      url: 'https://www.facebook.com/pbctulsa'
+    },
+    {
+      label: 'YouTube',
+      url: 'https://www.youtube.com/@pbctulsa'
+    },
+    {
+      label: 'Podcast',
+      url: 'https://podcast.pbctulsa.org/'
+    }
+  ]
 } as const;

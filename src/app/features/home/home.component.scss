@@ -118,6 +118,12 @@ h1 {
   color: var(--color-muted);
 }
 
+.media-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
 .video-frame {
   overflow: hidden;
   border: 1px solid var(--color-border);

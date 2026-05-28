@@ -34,6 +34,13 @@ import { churchInfo } from '@core/church-info';
             <a [href]="church.links.calendar" target="_blank" rel="noreferrer">Church Calendar</a>
             <a [href]="church.links.directory" target="_blank" rel="noreferrer">Church Directory</a>
           </article>
+
+          <article>
+            <h2>Follow Online</h2>
+            <a *ngFor="let link of church.socialLinks" [href]="link.url" target="_blank" rel="noreferrer">
+              {{ link.label }}
+            </a>
+          </article>
         </div>
       </div>
     </section>

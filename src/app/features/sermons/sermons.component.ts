@@ -16,7 +16,9 @@ import { churchInfo } from '@core/church-info';
 
         <div class="media-actions">
           <a class="button-link" [href]="church.links.youtube" target="_blank" rel="noreferrer">YouTube</a>
+          <a class="button-link secondary" [href]="church.links.podcast" target="_blank" rel="noreferrer">Podcast</a>
           <a class="button-link secondary" [href]="church.links.facebook" target="_blank" rel="noreferrer">Facebook</a>
+          <a class="button-link secondary" [href]="church.links.instagram" target="_blank" rel="noreferrer">Instagram</a>
           <a class="button-link secondary" [href]="church.links.mediaForm" target="_blank" rel="noreferrer">Media Form</a>
         </div>
       </div>
