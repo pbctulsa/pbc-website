@@ -1,5 +1,3 @@
-import { churchInfo } from '@core/church-info';
-
 export interface MinistryEntry {
   slug: string;
   title: string;
@@ -22,7 +20,7 @@ export const ministries: MinistryEntry[] = [
     summary:
       'The mission ministry helps the church focus on evangelism, outreach, and supporting the work of Christ at home and beyond.',
     image: {
-      src: churchInfo.gallery[0].src,
+      src: 'images/church-pics/mission.jpg',
       alt: 'Church members gathered in worship and mission'
     },
     overview:
@@ -41,7 +39,7 @@ export const ministries: MinistryEntry[] = [
     summary:
       'The men’s ministry exists to encourage men to grow in Christ, support their families, and serve the church with steady faithfulness.',
     image: {
-      src: churchInfo.gallery[3].src,
+      src: 'images/church-pics/men.jpg',
       alt: 'Men gathered for a church fellowship photo'
     },
     overview:
@@ -60,7 +58,7 @@ export const ministries: MinistryEntry[] = [
     summary:
       'The women’s ministry nurtures spiritual growth and helps women serve the church through compassion, hospitality, prayer, and teaching.',
     image: {
-      src: churchInfo.gallery[1].src,
+      src: 'images/church-pics/women.jpg',
       alt: 'Women gathered for a church fellowship photo'
     },
     overview:
@@ -79,7 +77,7 @@ export const ministries: MinistryEntry[] = [
     summary:
       'The youth ministry helps young people grow in faith, develop leadership, and live out the Gospel with purpose and joy.',
     image: {
-      src: churchInfo.gallery[8].src,
+      src: 'images/church-pics/youth.jpg',
       alt: 'Youth ministry gathering at church'
     },
     overview:
@@ -98,7 +96,7 @@ export const ministries: MinistryEntry[] = [
     summary:
       'The children’s ministry supports families by helping children learn Scripture, worship, and the love of Jesus in age-appropriate ways.',
     image: {
-      src: churchInfo.gallery[2].src,
+      src: 'images/church-pics/journey.jpg',
       alt: 'Children in a church ministry gathering'
     },
     overview:

@@ -18,56 +18,56 @@ export const churchInfo = {
   ],
   photos: [
     {
-      src: 'images/church-pics/PHOTO-2025-02-09-18-54-27.jpg',
-      alt: 'Peniel Baptist Church congregation gathered for worship',
+      src: 'images/church-pics/executive.jpg',
+      alt: 'Peniel Baptist Church leadership group photo',
+      title: 'Leadership'
+    },
+    {
+      src: 'images/church-pics/worship-team.jpg',
+      alt: 'Peniel Baptist Church worship team',
       title: 'Worship'
     },
     {
-      src: 'images/church-pics/WhatsApp Image 2025-07-20 at 01.36.29.jpeg',
-      alt: 'Peniel Baptist Church worship service',
-      title: 'Preaching'
-    },
-    {
-      src: 'images/church-pics/IMG_1020-Edit.jpg',
-      alt: 'Peniel Baptist Church gathering',
-      title: 'Praise'
+      src: 'images/church-pics/media-team.jpg',
+      alt: 'Peniel Baptist Church media team',
+      title: 'Media'
     }
   ],
   gallery: [
     {
-      src: 'images/church-pics/IMG_1020-Edit.jpg',
+      src: 'images/church-pics/worship-team.jpg',
       alt: 'Peniel Baptist Church worship gathering'
     },
     {
-      src: 'images/church-pics/IMG_1033-Edit.jpg',
+      src: 'images/church-pics/executive.jpg',
       alt: 'Peniel Baptist Church church family'
     },
     {
-      src: 'images/church-pics/IMG_1050-Edit.jpg',
-      alt: 'Peniel Baptist Church worship team'
+      src: 'images/church-pics/media-team.jpg',
+      alt: 'Peniel Baptist Church media team'
     },
     {
-      src: 'images/church-pics/122148129722759607.jpg',
-      alt: 'Peniel Baptist Church congregation'
+      src: 'images/church-pics/men.jpg',
+      alt: 'Peniel Baptist Church men ministry'
+    },
+    {
+      src: 'images/church-pics/women.jpg',
+      alt: 'Peniel Baptist Church women ministry'
+    },
+    {
+      src: 'images/church-pics/youth.jpg',
+      alt: 'Peniel Baptist Church youth ministry'
+    },
+    {
+      src: 'images/church-pics/mission.jpg',
+      alt: 'Peniel Baptist Church mission ministry'
+    },
+    {
+      src: 'images/church-pics/journey.jpg',
+      alt: 'Peniel Baptist Church children ministry'
     },
     {
       src: 'images/church-pics/122153676620759607.jpg',
-      alt: 'Peniel Baptist Church community moment'
-    },
-    {
-      src: 'images/church-pics/122162793866759607.jpg',
-      alt: 'Peniel Baptist Church church event'
-    },
-    {
-      src: 'images/church-pics/935647898724050.jpg',
-      alt: 'Peniel Baptist Church fellowship'
-    },
-    {
-      src: 'images/church-pics/940327744922732.jpg',
-      alt: 'Peniel Baptist Church worship service'
-    },
-    {
-      src: 'images/church-pics/1031755085779997.jpg',
       alt: 'Peniel Baptist Church ministry gathering'
     }
   ],
