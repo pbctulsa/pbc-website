@@ -13,17 +13,17 @@ export const churchInfo = {
   ],
   photos: [
     {
-      src: '/images/687156666_1261870276101809_669626852360092061_n.jpg',
+      src: 'images/687156666_1261870276101809_669626852360092061_n.jpg',
       alt: 'Peniel Baptist Church worship leader singing during service',
       title: 'Worship'
     },
     {
-      src: '/images/688635082_1261870286101808_4743110680737030896_n.jpg',
+      src: 'images/688635082_1261870286101808_4743110680737030896_n.jpg',
       alt: 'Peniel Baptist Church pastor preaching from the pulpit',
       title: 'Preaching'
     },
     {
-      src: '/images/689360299_1261870219435148_7023988842433850567_n.jpg',
+      src: 'images/689360299_1261870219435148_7023988842433850567_n.jpg',
       alt: 'Peniel Baptist Church worship leader playing guitar',
       title: 'Praise'
     }
