@@ -9,7 +9,7 @@
     <section class="department-section" *ngFor="let section of staffSections()">
       <h2>{{ section.title }}</h2>
       <div class="card-grid staff-grid">
-        <article class="content-card staff-card" *ngFor="let member of section.members">
+        <a class="content-card staff-card staff-card-link" *ngFor="let member of section.members" [routerLink]="['/about/staff', member.id]">
           <img *ngIf="member.photoUrl; else initials" class="staff-photo" [src]="member.photoUrl" [alt]="member.name" loading="lazy">
           <ng-template #initials>
             <div class="photo-placeholder" aria-hidden="true">{{ member.name.charAt(0) }}</div>
@@ -21,7 +21,7 @@
               <span class="department-chip" *ngFor="let label of departmentLabels(member)">{{ label }}</span>
             </div>
           </div>
-        </article>
+        </a>
       </div>
     </section>
 

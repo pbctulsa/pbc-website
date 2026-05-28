@@ -29,6 +29,19 @@ h3 {
   gap: 1rem;
 }
 
+.staff-card-link {
+  min-height: 11rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.staff-card-link:hover,
+.staff-card-link:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 42px rgba(20, 50, 92, 0.15);
+  outline: none;
+}
+
 .staff-card > div {
   min-width: 0;
 }
@@ -62,6 +75,10 @@ p {
 .role {
   color: var(--color-red-700);
   font-weight: 700;
+}
+
+.staff-card-link h3 {
+  overflow-wrap: anywhere;
 }
 
 .departments {
@@ -117,6 +134,7 @@ p {
 
   .staff-card {
     grid-template-columns: 1fr;
+    min-height: 0;
   }
 
   .photo-placeholder,
