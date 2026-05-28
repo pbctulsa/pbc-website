@@ -1,6 +1,7 @@
 export interface StaffTerm {
   role: string;
   department?: string;
+  departments?: string[];
   bylaw?: string;
   termStartYear?: number;
   termEndYear?: number;
@@ -13,6 +14,7 @@ export interface StaffMember {
   name: string;
   role: string;
   department?: string;
+  departments?: string[];
   bylaw?: string;
   termStartYear?: number;
   termEndYear?: number;

@@ -17,7 +17,9 @@
           <div>
             <h3>{{ member.name }}</h3>
             <p class="role">{{ member.role }}</p>
-            <p class="department">{{ member.department }}</p>
+            <div class="departments" *ngIf="departmentLabels(member).length">
+              <span class="department-chip" *ngFor="let label of departmentLabels(member)">{{ label }}</span>
+            </div>
             <p class="term">{{ termLabel(member) }}</p>
             <p class="bylaw" *ngIf="member.bylaw">{{ member.bylaw }}</p>
             <a *ngIf="member.email" [href]="'mailto:' + member.email">{{ member.email }}</a>

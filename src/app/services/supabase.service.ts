@@ -174,6 +174,11 @@ export class SupabaseService {
       name,
       role,
       department: this.firstString(currentTerm || {}, ['department']),
+      departments: this.firstStringArray(currentTerm || {}, ['departments']).length
+        ? this.firstStringArray(currentTerm || {}, ['departments'])
+        : this.firstString(currentTerm || {}, ['department'])
+          ? [this.firstString(currentTerm || {}, ['department']) as string]
+          : undefined,
       bylaw: this.firstString(currentTerm || {}, ['bylaw']),
       termStartYear: this.firstNumber(currentTerm || {}, ['term_start_year']),
       termEndYear: this.firstNumber(currentTerm || {}, ['term_end_year']),
@@ -187,9 +192,13 @@ export class SupabaseService {
   }
 
   private mapStaffTerm(row: StaffTermRow): StaffTerm {
+    const departments = this.firstStringArray(row, ['departments']);
+    const department = this.firstString(row, ['department']);
+
     return {
       role: this.firstString(row, ['role']) || 'Staff',
-      department: this.firstString(row, ['department']),
+      department,
+      departments: departments.length ? departments : department ? [department] : undefined,
       bylaw: this.firstString(row, ['bylaw']),
       termStartYear: this.firstNumber(row, ['term_start_year']),
       termEndYear: this.firstNumber(row, ['term_end_year']),
@@ -232,6 +241,21 @@ export class SupabaseService {
     }
 
     return undefined;
+  }
+
+  private firstStringArray(row: SongRow, keys: string[]): string[] {
+    for (const key of keys) {
+      const value = row[key];
+
+      if (Array.isArray(value)) {
+        return value
+          .filter((item): item is string => typeof item === 'string')
+          .map((item) => item.trim())
+          .filter(Boolean);
+      }
+    }
+
+    return [];
   }
 
   private sortSongs(a: Song, b: Song): number {

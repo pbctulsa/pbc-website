@@ -125,7 +125,7 @@ async function sampleStaff(limit) {
 function readImport(path, options) {
   const rows = readStaffCsv(path);
   const staff = rows.map(mapStaffRow);
-  const terms = rows.map((row, index) => mapTermRow(row, staff[index], options));
+  const terms = rows.map((row, index) => mapTermRow(row, staff[index], index, options));
 
   return { staff, terms };
 }
@@ -218,20 +218,25 @@ function mapStaffRow(row, index) {
   };
 }
 
-function mapTermRow(row, staff, options) {
+function mapTermRow(row, staff, index, options) {
   const role = clean(row['Job Title']) || 'Staff';
   const department = clean(row.Commitee);
+  const departments = parseMultiValue(row.Departments || row['Departments']);
   const startYear = options.termStartYear ?? null;
   const endYear = options.termEndYear ?? null;
+  const order = Number.isFinite(Number(row.Order)) ? Number(row.Order) : index + 1;
+  const normalizedDepartments = departments.length ? departments : department ? [department] : [];
 
   return {
-    id: deterministicUuid(`term:${staff.id}:${role}:${department || ''}:${startYear || ''}:${endYear || ''}`),
+    id: deterministicUuid(`term:${staff.id}:${role}:${normalizedDepartments.join('|')}:${startYear || ''}:${endYear || ''}:${order}`),
     staff_id: staff.id,
     role,
     department,
+    departments: normalizedDepartments.length ? normalizedDepartments : null,
     bylaw: clean(row.ByLaw),
     term_start_year: startYear,
     term_end_year: endYear,
+    order,
     is_current: options.current,
     source: 'wix',
     updated_at: new Date().toISOString()
@@ -366,6 +371,19 @@ function clean(value) {
 
   const cleaned = value.trim();
   return cleaned || undefined;
+}
+
+function parseMultiValue(value) {
+  const cleaned = clean(value);
+
+  if (!cleaned) {
+    return [];
+  }
+
+  return cleaned
+    .split(/[;,]/)
+    .map((part) => part.trim())
+    .filter(Boolean);
 }
 
 function formatSupabaseError(error) {

@@ -126,6 +126,14 @@ export class StaffComponent implements OnInit {
     return `tel:${digits || phone}`;
   }
 
+  protected departmentLabels(member: StaffMember): string[] {
+    if (member.departments?.length) {
+      return member.departments;
+    }
+
+    return member.department ? [member.department] : [];
+  }
+
   private buildStaffSections(staff: StaffMember[]): Array<{ title: string; members: StaffMember[] }> {
     const grouped = new Map<string, StaffMember[]>();
 

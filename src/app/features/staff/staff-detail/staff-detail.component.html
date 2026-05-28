@@ -17,7 +17,9 @@
 
       <div class="detail-copy">
         <p class="role">{{ member.role }}</p>
-        <p class="department">{{ member.department }}</p>
+        <div class="departments" *ngIf="departmentLabels(member).length">
+          <span class="department-chip" *ngFor="let label of departmentLabels(member)">{{ label }}</span>
+        </div>
         <p class="term">{{ termLabel(member.terms?.[0] || { role: member.role, isCurrent: true }) }}</p>
 
         <div class="contact-list">
@@ -38,7 +40,9 @@
             <li *ngFor="let term of member.terms">
               <strong>{{ term.role }}</strong>
               <span>
-                {{ term.department || 'No department' }}
+                <span class="term-departments">
+                  <span class="department-chip small" *ngFor="let label of termDepartmentLabels(term)">{{ label }}</span>
+                </span>
                 <em>{{ termLabel(term) }}</em>
               </span>
             </li>

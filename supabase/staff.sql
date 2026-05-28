@@ -24,6 +24,7 @@ create table if not exists public.staff_terms (
   staff_id uuid not null references public.staff(id) on delete cascade,
   role text not null,
   department text,
+  departments text[],
   bylaw text,
   "order" integer not null default 0,
   term_start_year integer,
@@ -33,6 +34,9 @@ create table if not exists public.staff_terms (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+alter table public.staff_terms
+  add column if not exists departments text[];
 
 create index if not exists staff_is_published_sort_order_idx
   on public.staff (is_published, sort_order, name);
