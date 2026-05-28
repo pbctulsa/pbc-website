@@ -3,6 +3,8 @@ export const churchInfo = {
   shortName: 'PBC Tulsa',
   address: '2140 South 67th E Ave, Tulsa, OK 74129',
   phone: '(918) 798-1163',
+  motto:
+    "Peniel Baptist Church is committed to reach and teach the Gospel with Jesus' love and compassion.",
   community:
     'PBC Tulsa is mainly a Thadou-speaking community church, with English worship service every third Sunday.',
   mission:
