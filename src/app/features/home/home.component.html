@@ -67,17 +67,21 @@
       <h2>Find what you need next</h2>
       <p>{{ church.address }}</p>
     </div>
+    <a class="step-link" routerLink="/ministries">
+      <span>Ministries</span>
+      <strong>Explore men, women, Khanglai, children, and mission</strong>
+    </a>
+    <a class="step-link" routerLink="/sermons">
+      <span>Sermons</span>
+      <strong>Watch and listen to recent messages</strong>
+    </a>
     <a class="step-link" routerLink="/songbook">
       <span>Songbook</span>
       <strong>Search lyrics and worship songs</strong>
     </a>
-    <a class="step-link" routerLink="/about/staff">
-      <span>Leadership</span>
-      <strong>Meet current staff and teams</strong>
-    </a>
-    <a class="step-link" [href]="church.links.calendar" target="_blank" rel="noreferrer">
-      <span>Calendar</span>
-      <strong>See upcoming church events</strong>
+    <a class="step-link" routerLink="/contact">
+      <span>Contact</span>
+      <strong>Get directions, phone, and service info</strong>
     </a>
   </div>
 </section>
