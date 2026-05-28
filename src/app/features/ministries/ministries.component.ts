@@ -29,12 +29,12 @@ export class MinistriesComponent {
     const url = new URL('https://www.facebook.com/plugins/page.php');
     url.searchParams.set('href', pageUrl);
     url.searchParams.set('tabs', 'timeline');
-    url.searchParams.set('width', '500');
-    url.searchParams.set('height', '700');
-    url.searchParams.set('small_header', 'false');
+    url.searchParams.set('width', '520');
+    url.searchParams.set('height', '560');
+    url.searchParams.set('small_header', 'true');
     url.searchParams.set('adapt_container_width', 'true');
-    url.searchParams.set('hide_cover', 'false');
-    url.searchParams.set('show_facepile', 'true');
+    url.searchParams.set('hide_cover', 'true');
+    url.searchParams.set('show_facepile', 'false');
     return this.sanitizer.bypassSecurityTrustResourceUrl(url.toString());
   }
 

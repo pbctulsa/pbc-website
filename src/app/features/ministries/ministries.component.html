@@ -41,24 +41,36 @@
 
           <section class="social-band" *ngIf="ministry.social as social">
             <h2>Social</h2>
+            <p class="social-intro">
+              Follow ministry updates here. Facebook content appears below in the page layout, and Instagram opens directly when a profile is available.
+            </p>
 
             <div class="social-grid">
-              <div class="facebook-feed" *ngIf="social.facebookPageUrl as facebookPageUrl">
-                <iframe
-                  [src]="facebookPluginUrl(facebookPageUrl)"
-                  title="Facebook page feed"
-                  loading="lazy"
-                  allowtransparency="true"
-                  allowfullscreen="true"
-                  scrolling="no"
-                ></iframe>
+              <div class="social-panel" *ngIf="social.facebookPageUrl as facebookPageUrl">
+                <div class="social-panel-head">
+                  <span>Facebook</span>
+                  <a [href]="facebookPageUrl" target="_blank" rel="noreferrer">Open page</a>
+                </div>
+                <div class="facebook-feed">
+                  <iframe
+                    [src]="facebookPluginUrl(facebookPageUrl)"
+                    title="Facebook page feed"
+                    loading="lazy"
+                    allowtransparency="true"
+                    allowfullscreen="true"
+                    scrolling="no"
+                  ></iframe>
+                </div>
               </div>
 
-              <div class="social-links" *ngIf="social.instagramUrl as instagramUrl">
-                <a [href]="instagramUrl" target="_blank" rel="noreferrer">
-                  Open Instagram profile
-                </a>
-                <p>Instagram does not expose a simple public feed embed from a profile link, so this opens the profile directly.</p>
+              <div class="social-panel social-links" *ngIf="social.instagramUrl as instagramUrl">
+                <div class="social-panel-head">
+                  <span>Instagram</span>
+                  <a [href]="instagramUrl" target="_blank" rel="noreferrer">Open profile</a>
+                </div>
+                <p>
+                  Instagram content opens directly from the profile link.
+                </p>
               </div>
             </div>
           </section>
