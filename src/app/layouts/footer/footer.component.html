@@ -2,16 +2,15 @@
   <div class="footer-inner">
     <section>
       <h2>{{ church.name }}</h2>
-      <p>{{ church.mission }}</p>
       <p>{{ church.address }}</p>
-      <p>{{ church.phone }}</p>
     </section>
 
-    <section>
+    <section class="footer-services">
       <h2>Service Times</h2>
-      <p *ngFor="let service of church.serviceTimes">
-        {{ service.label }} {{ service.time }}
-      </p>
+      <div *ngFor="let service of church.serviceTimes" class="service-item">
+        <span>{{ service.label }}</span>
+        <strong>{{ service.time }}</strong>
+      </div>
     </section>
 
     <section>

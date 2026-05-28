@@ -5,7 +5,7 @@
 
 .footer-inner {
   display: grid;
-  grid-template-columns: 1.4fr 0.9fr 0.9fr 0.9fr;
+  grid-template-columns: 1fr 1fr 0.9fr 0.9fr;
   width: min(100%, var(--layout-max));
   margin: 0 auto;
   padding: 2.5rem 1rem;
@@ -21,6 +21,38 @@ h2 {
 p {
   margin: 0.25rem 0;
   color: rgba(255, 255, 255, 0.82);
+}
+
+.footer-services {
+  min-width: 0;
+}
+
+.service-item {
+  display: grid;
+  gap: 0.2rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.service-item:first-of-type {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.service-item span {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.service-item strong {
+  color: var(--color-white);
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 a {
