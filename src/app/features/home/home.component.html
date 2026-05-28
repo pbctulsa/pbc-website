@@ -66,19 +66,7 @@
       <p class="eyebrow">Connect</p>
       <h2>Find what you need next</h2>
       <p>{{ church.community }}</p>
-      <div class="connect-info">
-        <div *ngFor="let service of church.serviceTimes">
-          <span>{{ service.label }}</span>
-          <strong>{{ service.time }}</strong>
-        </div>
-      </div>
-      <p class="connect-address">{{ church.address }}</p>
-      <div class="connect-links">
-        <a class="mini-link" routerLink="/contact">Visit</a>
-        <a class="mini-link" [href]="church.links.bulletin" target="_blank" rel="noreferrer">Bulletin</a>
-        <a class="mini-link" [href]="church.links.calendar" target="_blank" rel="noreferrer">Calendar</a>
-        <a class="mini-link" [href]="church.links.giving" target="_blank" rel="noreferrer">Give</a>
-      </div>
+      <a class="connect-link" routerLink="/contact">Visit, get directions, and see service times</a>
     </div>
     <a class="step-link" routerLink="/ministries">
       <span>Ministries</span>
