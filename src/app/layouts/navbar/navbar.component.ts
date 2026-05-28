@@ -22,7 +22,15 @@ export class NavbarComponent {
   protected readonly menuOpen = signal(false);
   protected readonly navItems: NavItem[] = [
     { label: 'Home', path: '/' },
-    { label: 'Songbook', path: '/songbook' },
+    {
+      label: 'About',
+      path: '/about',
+      children: [
+        { label: 'Who We Are', path: '/about' },
+        { label: 'Staff', path: '/about/staff' },
+        { label: 'Bylaws', path: churchInfo.links.bylaws, external: true }
+      ]
+    },
     {
       label: 'Ministries',
       path: '/ministries',
@@ -35,16 +43,8 @@ export class NavbarComponent {
         { label: 'Children', path: '/ministries/children' }
       ]
     },
-    {
-      label: 'About',
-      path: '/about',
-      children: [
-        { label: 'Who We Are', path: '/about' },
-        { label: 'Staff', path: '/about/staff' },
-        { label: 'Bylaws', path: churchInfo.links.bylaws, external: true }
-      ]
-    },
     { label: 'Sermons', path: '/sermons' },
+    { label: 'Songbook', path: '/songbook' },
     { label: 'Contact', path: '/contact' }
   ];
 
