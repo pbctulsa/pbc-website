@@ -16,6 +16,25 @@ export interface MinistryEntry {
 
 export const ministries: MinistryEntry[] = [
   {
+    slug: 'mission',
+    title: 'Mission Ministry',
+    subtitle: 'Reaching, teaching, and supporting the Gospel work.',
+    summary:
+      'The mission ministry helps the church focus on evangelism, outreach, and supporting the work of Christ at home and beyond.',
+    image: {
+      src: churchInfo.gallery[0].src,
+      alt: 'Church members gathered in worship and mission'
+    },
+    overview:
+      'This ministry exists to keep the church looking outward, encouraging prayer, service, giving, and participation in the Great Commission.',
+    bylawFocus: [
+      'Encourage evangelism and outreach in the church and community.',
+      'Support mission efforts through prayer, giving, and service.',
+      'Help the congregation stay focused on the Great Commission.'
+    ],
+    emphasis: ['Evangelism', 'Outreach', 'Prayer support', 'Mission giving']
+  },
+  {
     slug: 'men',
     title: 'Men Ministry',
     subtitle: 'Strengthening men to lead in faith, service, and prayer.',

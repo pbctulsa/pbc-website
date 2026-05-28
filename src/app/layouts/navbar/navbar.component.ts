@@ -28,6 +28,7 @@ export class NavbarComponent {
       path: '/ministries',
       children: [
         { label: 'Overview', path: '/ministries' },
+        { label: 'Mission', path: '/ministries/mission' },
         { label: 'Men', path: '/ministries/men' },
         { label: 'Women', path: '/ministries/women' },
         { label: 'Youth', path: '/ministries/youth' },
