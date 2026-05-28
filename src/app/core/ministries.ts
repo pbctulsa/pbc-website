@@ -14,6 +14,10 @@ export interface MinistryEntry {
   overview: string;
   bylawFocus: string[];
   emphasis: string[];
+  social?: {
+    facebookPageUrl?: string;
+    instagramUrl?: string;
+  };
 }
 
 export const ministries: MinistryEntry[] = [
@@ -73,7 +77,10 @@ export const ministries: MinistryEntry[] = [
       'Support leadership, stewardship, and service in the congregation.',
       'Build fellowship that strengthens prayer, accountability, and gospel witness.'
     ],
-    emphasis: ['Prayer and fellowship', 'Family leadership', 'Service and outreach', 'Stewardship']
+    emphasis: ['Prayer and fellowship', 'Family leadership', 'Service and outreach', 'Stewardship'],
+    social: {
+      facebookPageUrl: 'https://www.facebook.com/penielMen/'
+    }
   },
   {
     slug: 'women',
@@ -102,7 +109,10 @@ export const ministries: MinistryEntry[] = [
       'Support the church through care, hospitality, and service.',
       'Strengthen the witness of the church through godly living and unity.'
     ],
-    emphasis: ['Bible study and prayer', 'Care and hospitality', 'Service in the church', 'Fellowship']
+    emphasis: ['Bible study and prayer', 'Care and hospitality', 'Service in the church', 'Fellowship'],
+    social: {
+      facebookPageUrl: 'https://www.facebook.com/penielWomen/'
+    }
   },
   {
     slug: 'khanglai',
@@ -135,7 +145,11 @@ export const ministries: MinistryEntry[] = [
       'Create fellowship that encourages accountability and healthy growth.',
       'Prepare Khanglai to serve in worship, outreach, and church leadership.'
     ],
-    emphasis: ['Discipleship', 'Fellowship and worship', 'Outreach', 'Leadership development']
+    emphasis: ['Discipleship', 'Fellowship and worship', 'Outreach', 'Leadership development'],
+    social: {
+      facebookPageUrl: 'https://www.facebook.com/penielYouthTulsa/',
+      instagramUrl: 'https://www.instagram.com/khanglaipbctulsa/'
+    }
   },
   {
     slug: 'children',
@@ -176,7 +190,10 @@ export const ministries: MinistryEntry[] = [
       'Partner with parents and caregivers in the formation of children.',
       'Maintain a welcoming and safe environment for children to learn and grow.'
     ],
-    emphasis: ['Bible teaching', 'Family partnership', 'Safety and care', 'Worship and joy']
+    emphasis: ['Bible teaching', 'Family partnership', 'Safety and care', 'Worship and joy'],
+    social: {
+      facebookPageUrl: 'https://www.facebook.com/penielChildren/'
+    }
   }
 ];
 

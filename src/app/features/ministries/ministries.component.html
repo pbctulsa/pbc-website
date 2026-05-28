@@ -38,6 +38,30 @@
               <span *ngFor="let item of ministry.emphasis">{{ item }}</span>
             </div>
           </section>
+
+          <section class="social-band" *ngIf="ministry.social as social">
+            <h2>Social</h2>
+
+            <div class="social-grid">
+              <div class="facebook-feed" *ngIf="social.facebookPageUrl as facebookPageUrl">
+                <iframe
+                  [src]="facebookPluginUrl(facebookPageUrl)"
+                  title="Facebook page feed"
+                  loading="lazy"
+                  allowtransparency="true"
+                  allowfullscreen="true"
+                  scrolling="no"
+                ></iframe>
+              </div>
+
+              <div class="social-links" *ngIf="social.instagramUrl as instagramUrl">
+                <a [href]="instagramUrl" target="_blank" rel="noreferrer">
+                  Open Instagram profile
+                </a>
+                <p>Instagram does not expose a simple public feed embed from a profile link, so this opens the profile directly.</p>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
     </ng-container>
