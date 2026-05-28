@@ -111,7 +111,7 @@ import { churchInfo } from '@core/church-info';
       }
 
       .about-hero > img {
-        max-height: 22rem;
+        height: clamp(14rem, 26vw, 20rem);
         aspect-ratio: 4 / 3;
       }
 
@@ -198,7 +198,7 @@ import { churchInfo } from '@core/church-info';
       }
 
       .church-life > img {
-        max-height: 18rem;
+        height: 16rem;
         aspect-ratio: 1 / 1;
       }
 
@@ -231,25 +231,17 @@ import { churchInfo } from '@core/church-info';
       }
 
       .photo-grid img {
+        display: block;
+        width: 100%;
         margin: 0;
+        border-radius: 0.5rem;
         aspect-ratio: 1 / 1;
-      }
-
-      .photo-grid img:nth-child(1),
-      .photo-grid img:nth-child(4) {
-        grid-column: span 1;
-        aspect-ratio: 1 / 1;
+        object-fit: cover;
       }
 
       @media (max-width: 760px) {
         .photo-grid {
           grid-template-columns: repeat(2, 1fr);
-        }
-
-        .photo-grid img:nth-child(1),
-        .photo-grid img:nth-child(4) {
-          grid-column: span 1;
-          aspect-ratio: 1 / 1;
         }
       }
 
@@ -261,7 +253,11 @@ import { churchInfo } from '@core/church-info';
         }
 
         .about-hero > img {
-          max-height: 18rem;
+          height: 16rem;
+        }
+
+        .church-life > img {
+          height: 16rem;
         }
       }
 
