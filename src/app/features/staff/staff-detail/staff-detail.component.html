@@ -35,11 +35,7 @@
         </section>
 
         <section class="history-section" *ngIf="member.terms?.length">
-          <div class="history-header">
-            <h2>Term history</h2>
-            <a *ngIf="!showPastTerms()" [routerLink]="['/about/staff', member.id]" [queryParams]="{ past: 1 }">Show past terms</a>
-            <a *ngIf="showPastTerms()" [routerLink]="['/about/staff', member.id]">Show current terms</a>
-          </div>
+          <h2>Term history</h2>
           <ul>
             <li *ngFor="let term of visibleTerms(member)">
               <strong>{{ term.role }}</strong>

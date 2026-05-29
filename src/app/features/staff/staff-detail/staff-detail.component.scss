@@ -112,28 +112,11 @@
   margin-top: 1.5rem;
 }
 
-.history-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
 .bio-section h2,
 .history-section h2 {
   margin: 0 0 0.5rem;
   color: var(--color-blue-900);
   font-family: var(--font-serif);
-}
-
-.history-header h2 {
-  margin-bottom: 0;
-}
-
-.history-header a {
-  color: var(--color-red-700);
-  font-weight: 700;
-  text-decoration: none;
 }
 
 .bio-section p {
