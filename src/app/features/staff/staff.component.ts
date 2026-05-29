@@ -18,17 +18,20 @@ export class StaffComponent implements OnInit {
   protected readonly error = signal<string | null>(null);
   protected readonly staff = signal<StaffMember[]>(this.fallbackStaff());
   protected readonly departmentFilter = signal('All');
+  protected readonly currentStaff = computed(() =>
+    this.staff().filter((member) => this.isCurrentMember(member))
+  );
   protected readonly departmentOptions = computed(() => [
     'All',
     ...Array.from(
       new Set(
-        this.staff()
-          .flatMap((member) => member.departments ?? [])
+        this.currentStaff()
+          .flatMap((member) => this.departmentLabels(member))
           .filter(Boolean)
       )
     ).sort((left, right) => left.localeCompare(right))
   ]);
-  protected readonly staffSections = computed(() => this.buildStaffSections(this.staff(), this.departmentFilter()));
+  protected readonly staffSections = computed(() => this.buildStaffSections(this.currentStaff(), this.departmentFilter()));
 
   async ngOnInit(): Promise<void> {
     try {
@@ -202,5 +205,13 @@ export class StaffComponent implements OnInit {
     }
 
     return left.name.localeCompare(right.name);
+  }
+
+  private isCurrentMember(member: StaffMember): boolean {
+    if (!member.terms?.length) {
+      return true;
+    }
+
+    return member.terms.some((term) => term.isCurrent);
   }
 }

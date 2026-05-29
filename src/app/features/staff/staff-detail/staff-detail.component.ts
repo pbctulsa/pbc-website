@@ -1,8 +1,10 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { StaffMember, StaffTerm } from '@models/staff-member.model';
 import { SupabaseService } from '@services/supabase.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-staff-detail',
@@ -18,6 +20,10 @@ export class StaffDetailComponent {
   protected readonly staff = signal<StaffMember | null>(null);
   protected readonly errorMessage = signal('');
   protected readonly isLoading = signal(true);
+  protected readonly showPastTerms = toSignal(
+    this.route.queryParamMap.pipe(map((params) => params.get('past') === '1')),
+    { initialValue: false }
+  );
 
   constructor() {
     void this.loadStaff();
@@ -42,6 +48,17 @@ export class StaffDetailComponent {
 
   protected termDepartmentLabels(term: StaffTerm): string[] {
     return term.departments ?? [];
+  }
+
+  protected visibleTerms(member: StaffMember): StaffTerm[] {
+    const terms = member.terms ?? [];
+
+    if (this.showPastTerms()) {
+      return terms;
+    }
+
+    const currentTerms = terms.filter((term) => term.isCurrent);
+    return currentTerms.length ? currentTerms : terms.slice(0, 1);
   }
 
   private async loadStaff(): Promise<void> {
