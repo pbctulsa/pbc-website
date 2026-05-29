@@ -19,6 +19,10 @@
       No staff found for this department.
     </p>
 
+    <p class="status" *ngIf="!showPastTerms() && currentStaff().length === 0 && !isLoading() && !error()">
+      No current staff found.
+    </p>
+
     <section class="department-section" *ngFor="let section of staffSections()">
       <h2>{{ section.title }}</h2>
       <div class="card-grid staff-grid">
@@ -39,14 +43,9 @@
       </div>
     </section>
 
-    <section class="rotation-panel">
-      <h2>Current 3-Year Leadership Terms: 2025-2027</h2>
-      <ul>
-        <li *ngFor="let leader of rotatingLeaders()">
-          <strong>{{ leader.role }}</strong>
-          <span>{{ leader.name }} - {{ termLabel(leader) }}</span>
-        </li>
-      </ul>
-    </section>
+    <div class="staff-footer-link">
+      <a *ngIf="!showPastTerms()" [routerLink]="['/about/staff']" [queryParams]="{ past: 1 }">View previous terms</a>
+      <a *ngIf="showPastTerms()" [routerLink]="['/about/staff']">View current staff</a>
+    </div>
   </div>
 </section>

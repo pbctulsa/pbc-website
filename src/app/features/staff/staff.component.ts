@@ -1,9 +1,11 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { StaffMember } from '@models/staff-member.model';
 import { SupabaseService } from '@services/supabase.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-staff',
@@ -13,25 +15,36 @@ import { SupabaseService } from '@services/supabase.service';
   styleUrl: './staff.component.scss'
 })
 export class StaffComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
   private readonly supabaseService = inject(SupabaseService);
   protected readonly isLoading = signal(true);
   protected readonly error = signal<string | null>(null);
   protected readonly staff = signal<StaffMember[]>(this.fallbackStaff());
   protected readonly departmentFilter = signal('All');
+  protected readonly showPastTerms = toSignal(
+    this.route.queryParamMap.pipe(map((params) => params.get('past') === '1')),
+    { initialValue: false }
+  );
   protected readonly currentStaff = computed(() =>
     this.staff().filter((member) => this.isCurrentMember(member))
+  );
+  protected readonly pastStaff = computed(() =>
+    this.staff().filter((member) => this.isPastMember(member))
+  );
+  protected readonly visibleStaff = computed(() =>
+    this.showPastTerms() ? this.pastStaff() : this.currentStaff()
   );
   protected readonly departmentOptions = computed(() => [
     'All',
     ...Array.from(
       new Set(
-        this.currentStaff()
+        this.visibleStaff()
           .flatMap((member) => this.departmentLabels(member))
           .filter(Boolean)
       )
     ).sort((left, right) => left.localeCompare(right))
   ]);
-  protected readonly staffSections = computed(() => this.buildStaffSections(this.currentStaff(), this.departmentFilter()));
+  protected readonly staffSections = computed(() => this.buildStaffSections(this.visibleStaff(), this.departmentFilter()));
 
   async ngOnInit(): Promise<void> {
     try {
@@ -246,7 +259,7 @@ export class StaffComponent implements OnInit {
     if (!selectedDepartment && grouped.size === 0) {
       return [
         {
-          title: 'All Staff',
+          title: this.showPastTerms() ? 'Previous Staff' : 'All Staff',
           members: [...staff].sort((left, right) => this.compareStaff(left, right))
         }
       ];
@@ -289,5 +302,15 @@ export class StaffComponent implements OnInit {
 
   private isCurrentMember(member: StaffMember): boolean {
     return member.terms?.some((term) => term.isCurrent) ?? false;
+  }
+
+  private isPastMember(member: StaffMember): boolean {
+    const terms = member.terms ?? [];
+
+    if (!terms.length) {
+      return false;
+    }
+
+    return terms.some((term) => term.isCurrent === false) && !terms.some((term) => term.isCurrent);
   }
 }
