@@ -40,38 +40,50 @@
           </section>
 
           <section class="social-band" *ngIf="ministry.social as social">
-            <h2>Social</h2>
-            <p class="social-intro">
-              Follow ministry updates here. Facebook content appears below in the page layout, and Instagram opens directly when a profile is available.
-            </p>
-
-            <div class="social-grid">
-              <div class="social-panel" *ngIf="social.facebookPageUrl as facebookPageUrl">
-                <div class="social-panel-head">
-                  <span>Facebook</span>
-                  <a [href]="facebookPageUrl" target="_blank" rel="noreferrer">Open page</a>
-                </div>
-                <div class="facebook-feed">
-                  <iframe
-                    [src]="facebookPluginUrl(facebookPageUrl)"
-                    title="Facebook page feed"
-                    loading="lazy"
-                    allowtransparency="true"
-                    allowfullscreen="true"
-                    scrolling="no"
-                  ></iframe>
-                </div>
-              </div>
-
-              <div class="social-panel social-links" *ngIf="social.instagramUrl as instagramUrl">
-                <div class="social-panel-head">
-                  <span>Instagram</span>
-                  <a [href]="instagramUrl" target="_blank" rel="noreferrer">Open profile</a>
-                </div>
-                <p>
-                  Instagram content opens directly from the profile link.
+            <div class="social-header">
+              <div>
+                <h2>Social updates</h2>
+                <p class="social-intro">
+                  Recent ministry posts appear here as native cards, so the layout matches the rest of the site.
                 </p>
               </div>
+              <div class="social-actions">
+                <a *ngIf="social.facebookPageUrl as facebookPageUrl" [href]="facebookPageUrl" target="_blank" rel="noreferrer">Open Facebook</a>
+                <a *ngIf="social.instagramUrl as instagramUrl" [href]="instagramUrl" target="_blank" rel="noreferrer">Open Instagram</a>
+              </div>
+            </div>
+
+            <p class="status" *ngIf="feedLoading()">Loading ministry updates...</p>
+            <p class="status warning" *ngIf="feedError()">{{ feedError() }}</p>
+            <p class="status" *ngIf="!feedLoading() && !feedError() && feedItems().length === 0">
+              No recent posts available yet.
+            </p>
+
+            <div class="social-feed-grid" *ngIf="feedItems().length">
+              <article class="social-feed-card" *ngFor="let item of feedItems()">
+                <div class="social-feed-meta">
+                  <span>{{ item.platform | titlecase }}</span>
+                  <small *ngIf="item.author || item.createdTime">
+                    <span *ngIf="item.author">{{ item.author }}</span>
+                    <span *ngIf="item.author && item.createdTime"> - </span>
+                    <span *ngIf="item.createdTime">{{ item.createdTime | date : 'mediumDate' }}</span>
+                  </small>
+                </div>
+
+                <img
+                  *ngIf="item.imageUrl || item.thumbnailUrl"
+                  class="social-feed-image"
+                  [src]="item.imageUrl || item.thumbnailUrl"
+                  [alt]="item.message || 'Social update image'"
+                  loading="lazy"
+                >
+
+                <p class="social-feed-message">{{ item.message || 'Open the post to view the latest update.' }}</p>
+
+                <div class="social-feed-actions">
+                  <a [href]="item.permalinkUrl" target="_blank" rel="noreferrer">Open post</a>
+                </div>
+              </article>
             </div>
           </section>
         </div>

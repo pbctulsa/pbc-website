@@ -1,23 +1,27 @@
-import { NgFor, NgIf } from '@angular/common';
-import { Component, computed, inject } from '@angular/core';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DatePipe, NgFor, NgIf, TitleCasePipe } from '@angular/common';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 import { getMinistryBySlug, ministries } from '@core/ministries';
+import { MinistryFeedItem } from '@models/ministry-feed-item.model';
+import { MinistryFeedService } from '@services/ministry-feed.service';
 
 @Component({
   selector: 'app-ministries',
   standalone: true,
-  imports: [NgFor, NgIf, RouterLink],
+  imports: [DatePipe, NgFor, NgIf, TitleCasePipe, RouterLink],
   templateUrl: './ministries.component.html',
   styleUrl: './ministries.component.scss'
 })
 export class MinistriesComponent {
   private readonly route = inject(ActivatedRoute);
-  private readonly sanitizer = inject(DomSanitizer);
+  private readonly ministryFeedService = inject(MinistryFeedService);
 
   protected readonly ministries = ministries;
+  protected readonly feedItems = signal<MinistryFeedItem[]>([]);
+  protected readonly feedLoading = signal(false);
+  protected readonly feedError = signal('');
   protected readonly slug = toSignal(
     this.route.paramMap.pipe(map((params) => params.get('slug'))),
     { initialValue: null }
@@ -25,20 +29,38 @@ export class MinistriesComponent {
   protected readonly selectedMinistry = computed(() => getMinistryBySlug(this.slug()));
   protected readonly isInvalidSlug = computed(() => this.slug() !== null && !this.selectedMinistry());
 
-  protected facebookPluginUrl(pageUrl: string): SafeResourceUrl {
-    const url = new URL('https://www.facebook.com/plugins/page.php');
-    url.searchParams.set('href', pageUrl);
-    url.searchParams.set('tabs', 'timeline');
-    url.searchParams.set('width', '520');
-    url.searchParams.set('height', '560');
-    url.searchParams.set('small_header', 'true');
-    url.searchParams.set('adapt_container_width', 'true');
-    url.searchParams.set('hide_cover', 'true');
-    url.searchParams.set('show_facepile', 'false');
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url.toString());
+  constructor() {
+    effect(() => {
+      const ministry = this.selectedMinistry();
+
+      if (!ministry?.social) {
+        this.feedItems.set([]);
+        this.feedError.set('');
+        this.feedLoading.set(false);
+        return;
+      }
+
+      void this.loadFeed(ministry.slug);
+    });
   }
 
   protected selectMinistryPath(slug: string): string {
     return `/ministries/${slug}`;
+  }
+
+  private async loadFeed(slug: string): Promise<void> {
+    this.feedLoading.set(true);
+    this.feedError.set('');
+
+    try {
+      const items = await this.ministryFeedService.getFeed(slug);
+      this.feedItems.set(items);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unable to load ministry updates.';
+      this.feedError.set(message);
+      this.feedItems.set([]);
+    } finally {
+      this.feedLoading.set(false);
+    }
   }
 }
