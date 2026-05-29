@@ -205,7 +205,7 @@ export class SupabaseService {
   }
 
   private staffSelect(): string {
-    return '*,staff_terms(role,department,bylaw,term_start_year,term_end_year,"order",is_current)';
+    return '*,staff_terms(role,department,departments,bylaw,term_start_year,term_end_year,"order",is_current)';
   }
 
   private firstString(row: SongRow, keys: string[]): string | undefined {
