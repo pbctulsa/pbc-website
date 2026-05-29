@@ -162,10 +162,14 @@ export class SupabaseService {
       return (this.firstNumber(b, ['term_start_year']) || 0) - (this.firstNumber(a, ['term_start_year']) || 0);
         })
       : [];
+    const currentTerms = terms.filter((term) => term['is_current'] === true);
     const currentTerm =
-      terms.find((term) => term['is_current'] === true) ||
+      currentTerms[0] ||
       terms.find((term) => term['is_current'] !== false) ||
       terms[0];
+    const currentDepartments = Array.from(
+      new Set(currentTerms.flatMap((term) => this.firstStringArray(term, ['departments'])))
+    );
     const name = this.firstString(row, ['name']) || 'Unnamed Staff Member';
     const role = this.firstString(currentTerm || {}, ['role']) || 'Staff';
 
@@ -174,7 +178,7 @@ export class SupabaseService {
       name,
       role,
       department: this.firstString(currentTerm || {}, ['department']),
-      departments: Array.from(new Set(this.firstStringArray(currentTerm || {}, ['departments']))),
+      departments: currentDepartments,
       bylaw: this.firstString(currentTerm || {}, ['bylaw']),
       termStartYear: this.firstNumber(currentTerm || {}, ['term_start_year']),
       termEndYear: this.firstNumber(currentTerm || {}, ['term_end_year']),
