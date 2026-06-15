@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { readFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 
 loadDotenv();
 
@@ -39,6 +39,12 @@ switch (command) {
     break;
   case 'format-lyrics':
     await formatLyrics(args[0], args.includes('--write'));
+    break;
+  case 'format-numbered-verses':
+    await formatNumberedVerses(args.includes('--write'));
+    break;
+  case 'split-verse-one-chorus':
+    await splitVerseOneChorus(args.find((arg) => arg !== '--write'), args.includes('--write'));
     break;
   case 'restore-lyrics-backup':
     await restoreLyricsBackup(args[0], args.includes('--write'));
@@ -159,6 +165,103 @@ async function formatLyrics(id, shouldWrite) {
   console.log(`Updated lyrics_text for ${updated.title}`);
 }
 
+async function formatNumberedVerses(shouldWrite) {
+  const rows = await fetchAllSongsForLyricsFormatting();
+  const changedRows = rows
+    .map((row) => ({
+      ...row,
+      formattedLyricsText: formatNumberedVerseLabels(row.lyrics_text || '')
+    }))
+    .filter((row) => row.formattedLyricsText !== (row.lyrics_text || '').replace(/\r\n?/g, '\n').trim());
+
+  console.log(`${changedRows.length}/${rows.length} songs have numbered verse labels to format.`);
+
+  if (!changedRows.length) {
+    return;
+  }
+
+  console.log('\nPreview of first changed song:\n');
+  console.log(`# ${changedRows[0].title}`);
+  console.log('');
+  console.log(changedRows[0].formattedLyricsText.slice(0, 1200));
+
+  if (!shouldWrite) {
+    console.log('\nDry run only. Add --write to update lyrics_text in Supabase.');
+    return;
+  }
+
+  const backupPath = writeLyricsBackup(changedRows, 'numbered-verses');
+  console.log(`\nBackup written to ${backupPath}`);
+
+  for (let index = 0; index < changedRows.length; index += 1) {
+    const row = changedRows[index];
+    const { error } = await supabase
+      .from(table)
+      .update({ lyrics_text: row.formattedLyricsText })
+      .eq('id', row.id);
+
+    if (error) {
+      fail(`Stopped at ${index + 1}/${changedRows.length} (${row.id}): ${formatSupabaseError(error)}`);
+    }
+
+    if ((index + 1) % 50 === 0 || index + 1 === changedRows.length) {
+      console.log(`Updated ${index + 1}/${changedRows.length}`);
+    }
+  }
+
+  console.log(`Formatted numbered verses for ${changedRows.length} songs.`);
+}
+
+async function splitVerseOneChorus(scopePath, shouldWrite) {
+  const scopedIds = scopePath ? readBackupIds(scopePath) : null;
+  const rows = await fetchAllSongsForLyricsFormatting();
+  const scopedRows = scopedIds ? rows.filter((row) => scopedIds.has(row.id)) : rows;
+  const changedRows = scopedRows
+    .map((row) => ({
+      ...row,
+      formattedLyricsText: splitVerseOneEightLineChorus(row.lyrics_text || '')
+    }))
+    .filter((row) => row.formattedLyricsText !== (row.lyrics_text || '').replace(/\r\n?/g, '\n').trim());
+
+  const scopeText = scopedIds ? ` scoped from ${scopePath}` : '';
+  console.log(`${changedRows.length}/${scopedRows.length} songs${scopeText} have an 8-line Verse 1 to split.`);
+
+  if (!changedRows.length) {
+    return;
+  }
+
+  console.log('\nPreview of first changed song:\n');
+  console.log(`# ${changedRows[0].title}`);
+  console.log('');
+  console.log(changedRows[0].formattedLyricsText.slice(0, 1400));
+
+  if (!shouldWrite) {
+    console.log('\nDry run only. Add --write to update lyrics_text in Supabase.');
+    return;
+  }
+
+  const backupPath = writeLyricsBackup(changedRows, 'verse-one-chorus');
+  console.log(`\nBackup written to ${backupPath}`);
+
+  for (let index = 0; index < changedRows.length; index += 1) {
+    const row = changedRows[index];
+    const { error } = await supabase
+      .from(table)
+      .update({ lyrics_text: row.formattedLyricsText })
+      .eq('id', row.id);
+
+    if (error) {
+      fail(`Stopped at ${index + 1}/${changedRows.length} (${row.id}): ${formatSupabaseError(error)}`);
+    }
+
+    if ((index + 1) % 50 === 0 || index + 1 === changedRows.length) {
+      console.log(`Updated ${index + 1}/${changedRows.length}`);
+    }
+  }
+
+  console.log(`Split Verse 1 choruses for ${changedRows.length} songs.`);
+}
+
 async function restoreLyricsBackup(path, shouldWrite) {
   if (!path) {
     fail('Usage: npm run songs:admin -- restore-lyrics-backup <backup-path> [--write]');
@@ -200,6 +303,206 @@ async function restoreLyricsBackup(path, shouldWrite) {
   }
 
   console.log(`Restored lyrics_text for ${restoreRows.length} songs.`);
+}
+
+async function fetchAllSongsForLyricsFormatting() {
+  const pageSize = 1000;
+  const rows = [];
+  let page = 0;
+
+  while (true) {
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+    const { data, error } = await supabase
+      .from(table)
+      .select('id,title,lyrics_text')
+      .range(from, to);
+
+    if (error) {
+      fail(formatSupabaseError(error));
+    }
+
+    rows.push(...(data ?? []));
+
+    if (!data || data.length < pageSize) {
+      break;
+    }
+
+    page += 1;
+  }
+
+  return rows;
+}
+
+function formatNumberedVerseLabels(rawLyrics) {
+  const normalizedLyrics = rawLyrics.replace(/\r\n?/g, '\n').trim();
+
+  if (!normalizedLyrics) {
+    return normalizedLyrics;
+  }
+
+  const headerLines = [];
+  const sections = [];
+  let currentSection = null;
+  let changed = false;
+
+  for (const line of normalizedLyrics.split('\n')) {
+    const trimmed = line.trim();
+    const verseMatch = trimmed.match(/^(\d+)[.)]\s*(.*)$/);
+
+    if (verseMatch) {
+      changed = true;
+      currentSection = {
+        label: `Verse ${verseMatch[1]}`,
+        lines: []
+      };
+      sections.push(currentSection);
+
+      if (verseMatch[2].trim()) {
+        currentSection.lines.push(verseMatch[2].trim());
+      }
+
+      continue;
+    }
+
+    if (!trimmed) {
+      continue;
+    }
+
+    if (currentSection) {
+      currentSection.lines.push(trimmed);
+      continue;
+    }
+
+    headerLines.push(trimmed);
+  }
+
+  if (!changed) {
+    return normalizedLyrics;
+  }
+
+  const parts = [];
+
+  if (headerLines.length) {
+    parts.push(headerLines.join('\n'));
+  }
+
+  parts.push(
+    ...sections.map((section) => [section.label, ...section.lines].join('\n'))
+  );
+
+  return parts.join('\n\n');
+}
+
+function splitVerseOneEightLineChorus(rawLyrics) {
+  const normalizedLyrics = rawLyrics.replace(/\r\n?/g, '\n').trim();
+
+  if (!normalizedLyrics) {
+    return normalizedLyrics;
+  }
+
+  const headerLines = [];
+  const sections = [];
+  let currentSection = null;
+
+  for (const line of normalizedLyrics.split('\n')) {
+    const trimmed = line.trim();
+    const labelMatch = trimmed.match(/^(Verse\s+\d+|Chorus)$/i);
+
+    if (labelMatch) {
+      currentSection = {
+        label: normalizeSectionLabel(labelMatch[1]),
+        lines: []
+      };
+      sections.push(currentSection);
+      continue;
+    }
+
+    if (!trimmed) {
+      continue;
+    }
+
+    if (currentSection) {
+      currentSection.lines.push(trimmed);
+      continue;
+    }
+
+    headerLines.push(trimmed);
+  }
+
+  let changed = false;
+  const normalizedSections = [];
+
+  for (const section of sections) {
+    if (!changed && section.label === 'Verse 1' && section.lines.length === 8) {
+      changed = true;
+      normalizedSections.push({
+        label: 'Verse 1',
+        lines: section.lines.slice(0, 4)
+      });
+      normalizedSections.push({
+        label: 'Chorus',
+        lines: section.lines.slice(4)
+      });
+      continue;
+    }
+
+    normalizedSections.push(section);
+  }
+
+  if (!changed) {
+    return normalizedLyrics;
+  }
+
+  const parts = [];
+
+  if (headerLines.length) {
+    parts.push(headerLines.join('\n'));
+  }
+
+  parts.push(
+    ...normalizedSections.map((section) => [section.label, ...section.lines].join('\n'))
+  );
+
+  return parts.join('\n\n');
+}
+
+function normalizeSectionLabel(label) {
+  const verseMatch = label.match(/^Verse\s+(\d+)$/i);
+
+  if (verseMatch) {
+    return `Verse ${verseMatch[1]}`;
+  }
+
+  return 'Chorus';
+}
+
+function readBackupIds(path) {
+  let rows;
+  try {
+    rows = JSON.parse(readFileSync(path, 'utf8'));
+  } catch (error) {
+    fail(`Could not read backup file: ${error.message}`);
+  }
+
+  return new Set(rows.map((row) => row.id).filter(Boolean));
+}
+
+function writeLyricsBackup(rows, label) {
+  mkdirSync('backups', { recursive: true });
+
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const backupPath = `backups/song-lyrics-before-${label}-${timestamp}.json`;
+  const backupRows = rows.map((row) => ({
+    id: row.id,
+    title: row.title,
+    oldLyricsText: row.lyrics_text || '',
+    newLyricsText: row.formattedLyricsText
+  }));
+
+  writeFileSync(backupPath, `${JSON.stringify(backupRows, null, 2)}\n`);
+
+  return backupPath;
 }
 
 function formatForProPresenter(title, rawLyrics) {
@@ -335,6 +638,10 @@ Usage:
   npm run songs:admin -- update <song-id> '{"title":"New Title"}'
   npm run songs:admin -- format-lyrics <song-id>
   npm run songs:admin -- format-lyrics <song-id> --write
+  npm run songs:admin -- format-numbered-verses
+  npm run songs:admin -- format-numbered-verses --write
+  npm run songs:admin -- split-verse-one-chorus [backup-path]
+  npm run songs:admin -- split-verse-one-chorus [backup-path] --write
   npm run songs:admin -- restore-lyrics-backup <backup-path>
   npm run songs:admin -- restore-lyrics-backup <backup-path> --write
 `);

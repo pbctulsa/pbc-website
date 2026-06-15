@@ -35,5 +35,89 @@
     <ng-template #noLyrics>
       <p class="status" *ngIf="song()">Lyrics are not available for this song yet.</p>
     </ng-template>
+
+    <section *ngIf="song() as selectedSong" class="suggest-edit">
+      <div class="suggest-edit-header">
+        <div>
+          <h2>Suggest an edit</h2>
+          <p>Send a correction for approval without changing the public song.</p>
+        </div>
+        <button *ngIf="!isSuggestingEdit()" type="button" class="edit-toggle" (click)="openSuggestionForm()">
+          Suggest edit
+        </button>
+      </div>
+
+      <p class="status success" *ngIf="suggestionMessage()">{{ suggestionMessage() }}</p>
+      <p class="status warning" *ngIf="suggestionError()">{{ suggestionError() }}</p>
+
+      <form
+        *ngIf="isSuggestingEdit()"
+        #suggestionForm="ngForm"
+        class="suggestion-form"
+        (ngSubmit)="submitSuggestion(suggestionForm)"
+      >
+        <input
+          class="hidden-field"
+          type="text"
+          name="website"
+          tabindex="-1"
+          autocomplete="off"
+          [(ngModel)]="suggestion.website"
+        >
+
+        <label>
+          <span>Title</span>
+          <input name="title" required [(ngModel)]="suggestion.title">
+        </label>
+
+        <div class="form-grid">
+          <label>
+            <span>Author</span>
+            <input name="author" [(ngModel)]="suggestion.author">
+          </label>
+
+          <label>
+            <span>Book</span>
+            <input name="category" [(ngModel)]="suggestion.category">
+          </label>
+
+          <label>
+            <span>Key</span>
+            <input name="songKey" [(ngModel)]="suggestion.songKey">
+          </label>
+        </div>
+
+        <label>
+          <span>Lyrics</span>
+          <textarea name="lyrics" rows="18" [(ngModel)]="suggestion.lyrics"></textarea>
+        </label>
+
+        <div class="form-grid">
+          <label>
+            <span>Your name</span>
+            <input name="submitterName" autocomplete="name" [(ngModel)]="suggestion.submitterName">
+          </label>
+
+          <label>
+            <span>Email</span>
+            <input name="submitterEmail" type="email" autocomplete="email" [(ngModel)]="suggestion.submitterEmail">
+          </label>
+        </div>
+
+        <label>
+          <span>Note</span>
+          <textarea name="note" rows="3" [(ngModel)]="suggestion.note"></textarea>
+        </label>
+
+        <div class="form-actions">
+          <button type="submit" class="edit-toggle" [disabled]="suggestionForm.invalid || isSubmittingSuggestion()">
+            {{ isSubmittingSuggestion() ? 'Submitting...' : 'Submit suggestion' }}
+          </button>
+          <button type="button" class="cancel-button" (click)="cancelSuggestionForm(suggestionForm)">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </section>
   </article>
 </section>

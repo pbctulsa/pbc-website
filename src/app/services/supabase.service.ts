@@ -5,6 +5,19 @@ import { StaffMember, StaffTerm } from '@models/staff-member.model';
 import { Song } from '@models/song.model';
 
 type SongRow = Record<string, unknown>;
+type SongEditSuggestion = {
+  song: Song;
+  suggested: {
+    title: string;
+    author: string;
+    category: string;
+    songKey: string;
+    lyrics: string;
+  };
+  submitterName?: string;
+  submitterEmail?: string;
+  note?: string;
+};
 type StaffRow = Record<string, unknown> & {
   staff_terms?: StaffTermRow[];
 };
@@ -16,6 +29,7 @@ type StaffTermRow = Record<string, unknown>;
 export class SupabaseService {
   private client?: SupabaseClient;
   private readonly songsTable = environment.supabase.songsTable;
+  private readonly songEditSuggestionsTable = 'song_edit_suggestions';
   private readonly staffTable = environment.supabase.staffTable || 'staff';
 
   get supabase(): SupabaseClient {
@@ -75,6 +89,35 @@ export class SupabaseService {
     }
 
     return data ? this.mapSongRow(data) : null;
+  }
+
+  async submitSongEditSuggestion(suggestion: SongEditSuggestion): Promise<void> {
+    const { song, suggested } = suggestion;
+    const original = {
+      title: song.title || '',
+      author: song.author || '',
+      category: song.category || '',
+      songKey: song.songKey || '',
+      lyrics: song.lyrics || ''
+    };
+
+    const { error } = await this.getClient()
+      .from(this.songEditSuggestionsTable)
+      .insert({
+        song_id: song.id,
+        song_title: song.title,
+        song_number: song.number ?? null,
+        original_fields: original,
+        suggested_fields: suggested,
+        submitter_name: this.blankToNull(suggestion.submitterName),
+        submitter_email: this.blankToNull(suggestion.submitterEmail),
+        note: this.blankToNull(suggestion.note),
+        status: 'pending'
+      });
+
+    if (error) {
+      throw error;
+    }
   }
 
   async getStaff(): Promise<StaffMember[]> {
@@ -253,6 +296,12 @@ export class SupabaseService {
     }
 
     return [];
+  }
+
+  private blankToNull(value: string | undefined): string | null {
+    const trimmed = value?.trim();
+
+    return trimmed ? trimmed : null;
   }
 
   private sortSongs(a: Song, b: Song): number {
