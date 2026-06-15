@@ -30,7 +30,13 @@
       </div>
     </dl>
 
-    <pre *ngIf="song()?.lyrics; else noLyrics" class="lyrics">{{ song()?.lyrics }}</pre>
+    <div *ngIf="song()?.lyrics; else noLyrics" class="lyrics-panel">
+      <div class="lyrics-toolbar">
+        <button type="button" class="copy-button" (click)="copyLyrics()">Copy lyrics</button>
+        <span class="copy-status" aria-live="polite">{{ copyMessage() }}</span>
+      </div>
+      <pre class="lyrics">{{ song()?.lyrics }}</pre>
+    </div>
 
     <ng-template #noLyrics>
       <p class="status" *ngIf="song()">Lyrics are not available for this song yet.</p>

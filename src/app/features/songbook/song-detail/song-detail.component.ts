@@ -23,6 +23,7 @@ export class SongDetailComponent {
   protected readonly isSubmittingSuggestion = signal(false);
   protected readonly suggestionMessage = signal('');
   protected readonly suggestionError = signal('');
+  protected readonly copyMessage = signal('');
   protected readonly suggestion = {
     title: '',
     author: '',
@@ -135,6 +136,28 @@ export class SongDetailComponent {
     }
   }
 
+  protected async copyLyrics(): Promise<void> {
+    const lyrics = this.song()?.lyrics;
+
+    if (!lyrics) {
+      return;
+    }
+
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(lyrics);
+      } else {
+        this.copyTextFallback(lyrics);
+      }
+
+      this.copyMessage.set('Lyrics copied.');
+      window.setTimeout(() => this.copyMessage.set(''), 2500);
+    } catch {
+      this.copyMessage.set('Unable to copy lyrics.');
+      window.setTimeout(() => this.copyMessage.set(''), 2500);
+    }
+  }
+
   private hasSuggestionChange(
     song: Song,
     suggested: { title: string; author: string; category: string; songKey: string; lyrics: string }
@@ -146,5 +169,17 @@ export class SongDetailComponent {
       suggested.songKey !== (song.songKey || '') ||
       suggested.lyrics !== (song.lyrics || '')
     );
+  }
+
+  private copyTextFallback(text: string): void {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.setAttribute('readonly', '');
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-10000px';
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
   }
 }
