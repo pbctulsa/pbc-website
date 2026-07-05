@@ -1,11 +1,12 @@
 import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { churchInfo } from '@core/church-info';
 
 @Component({
   selector: 'app-about',
   standalone: true,
-  imports: [NgFor],
+  imports: [NgFor, RouterLink],
   template: `
     <section class="page-section">
       <div class="section-inner">
@@ -75,8 +76,11 @@ import { churchInfo } from '@core/church-info';
             Convention, the Baptist General Convention of Oklahoma, and the Tulsa Metro Baptist
             Association.
           </p>
-          <a class="button-link" [href]="church.links.bylaws" target="_blank" rel="noreferrer">
-            Download Bylaws
+          <p class="bylaws-note">
+            The current bylaws and policy document was approved January 11, 2026.
+          </p>
+          <a class="button-link" routerLink="/about/bylaws">
+            View and Download Bylaws
           </a>
         </section>
 
@@ -216,6 +220,12 @@ import { churchInfo } from '@core/church-info';
         max-width: 58rem;
         color: var(--color-blue-900);
         font-weight: 800;
+      }
+
+      .affiliation-band .bylaws-note {
+        margin-top: 0.75rem;
+        color: var(--color-muted);
+        font-weight: 500;
       }
 
       .affiliation-band .button-link {

@@ -28,7 +28,7 @@ export class NavbarComponent {
       children: [
         { label: 'Who We Are', path: '/about' },
         { label: 'Staff', path: '/about/staff' },
-        { label: 'Bylaws', path: churchInfo.links.bylaws, external: true }
+        { label: 'Bylaws', path: '/about/bylaws' }
       ]
     },
     {

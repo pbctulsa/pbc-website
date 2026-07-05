@@ -37,6 +37,11 @@ export const routes: Routes = [
     title: 'Staff Profile | PBC'
   },
   {
+    path: 'about/bylaws',
+    loadComponent: () => import('./features/bylaws/bylaws.component').then((m) => m.BylawsComponent),
+    title: 'Bylaws | PBC'
+  },
+  {
     path: 'ministries',
     loadComponent: () => import('./features/ministries/ministries.component').then((m) => m.MinistriesComponent),
     title: 'Ministries | PBC'
