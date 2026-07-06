@@ -40,8 +40,10 @@ jobs:
           SUPABASE_SONGS_TABLE: ${{ secrets.SUPABASE_SONGS_TABLE }}
 
       - name: Build
-        run: npx ng build --configuration production --base-href /pbc-website/ && cp dist/pbc-website/browser/index.html dist/pbc-website/browser/404.html
-
+        run: |
+          npx ng build --configuration production --base-href /
+          cp dist/pbc-website/browser/index.html dist/pbc-website/browser/404.html
+          
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
