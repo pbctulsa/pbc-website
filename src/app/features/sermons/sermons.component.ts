@@ -12,7 +12,7 @@ import { churchInfo } from '@core/church-info';
         <p class="lead">
           Use this page for sermon archives, livestream embeds, podcast links, and worship media.
         </p>
-        <img class="sermons-photo" [src]="church.gallery[1].src" [alt]="church.gallery[1].alt" loading="lazy">
+        <img class="sermons-photo" [src]="sermonsPhoto.src" [alt]="sermonsPhoto.alt" loading="lazy">
 
         <div class="media-actions">
           <a class="button-link" [href]="church.links.youtube" target="_blank" rel="noreferrer">YouTube</a>
@@ -46,4 +46,8 @@ import { churchInfo } from '@core/church-info';
 })
 export class SermonsComponent {
   protected readonly church = churchInfo;
+  protected readonly sermonsPhoto = {
+    src: 'images/church-pics/1031755085779997.jpg',
+    alt: 'Peniel Baptist Church congregation gathered for preaching and worship'
+  };
 }
