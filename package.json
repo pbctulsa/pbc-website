@@ -6,8 +6,6 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:gh-pages": "node scripts/write-production-env.mjs && ng build --configuration production --base-href /pbc-website/ && cp dist/pbc-website/browser/index.html dist/pbc-website/browser/404.html",
-    "deploy:gh-pages": "npm run build:gh-pages && npx angular-cli-ghpages --dir=dist/pbc-website/browser",
     "songs:admin": "node scripts/songs-admin.mjs",
     "staff:admin": "node scripts/staff-admin.mjs",
     "watch": "ng build --watch --configuration development"
@@ -30,7 +28,6 @@
     "@angular/cli": "^18.2.13",
     "@angular/compiler-cli": "^18.2.13",
     "@types/node": "^22.10.2",
-    "angular-cli-ghpages": "^2.0.3",
     "typescript": "~5.5.4"
   }
 }
