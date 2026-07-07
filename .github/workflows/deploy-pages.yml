@@ -1,9 +1,6 @@
 name: Deploy GitHub Pages
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
@@ -18,6 +15,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      CUSTOM_DOMAIN: ${{ github.ref_name == 'main' && 'pbctulsa.org' || 'next.pbctulsa.org' }}
 
     steps:
       - name: Checkout
@@ -43,6 +42,7 @@ jobs:
         run: |
           npx ng build --configuration production --base-href /
           cp dist/pbc-website/browser/index.html dist/pbc-website/browser/404.html
+          echo "$CUSTOM_DOMAIN" > dist/pbc-website/browser/CNAME
           
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -54,7 +54,7 @@ jobs:
 
   deploy:
     environment:
-      name: github-pages
+      name: ${{ github.ref_name == 'main' && 'production' || 'next' }}
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
