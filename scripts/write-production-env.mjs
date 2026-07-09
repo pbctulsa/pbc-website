@@ -2,22 +2,12 @@ import { readFileSync, writeFileSync } from 'node:fs';
 
 loadDotenv();
 
-const url = process.env.SUPABASE_URL;
-const anonKey = process.env.SUPABASE_ANON_KEY;
-const songsTable = process.env.SUPABASE_SONGS_TABLE || 'songs';
-const staffTable = process.env.SUPABASE_STAFF_TABLE || 'staff';
-
-if (!url || !anonKey) {
-  fail('Missing SUPABASE_URL or SUPABASE_ANON_KEY.');
-}
+const apiBaseUrl = process.env.CLOUDFLARE_API_BASE_URL || '';
 
 const environmentFile = `export const environment = {
   production: true,
-  supabase: {
-    url: ${JSON.stringify(url)},
-    anonKey: ${JSON.stringify(anonKey)},
-    songsTable: ${JSON.stringify(songsTable)},
-    staffTable: ${JSON.stringify(staffTable)}
+  cloudflare: {
+    apiBaseUrl: ${JSON.stringify(apiBaseUrl)}
   }
 };
 `;
@@ -54,9 +44,4 @@ function loadDotenv() {
       process.env[key] = value;
     }
   }
-}
-
-function fail(message) {
-  console.error(message);
-  process.exit(1);
 }

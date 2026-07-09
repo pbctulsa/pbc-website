@@ -11,7 +11,13 @@ interface MinistryFeedResponse {
 })
 export class MinistryFeedService {
   async getFeed(slug: string): Promise<MinistryFeedItem[]> {
-    const endpoint = new URL('/functions/v1/ministry-feed', environment.supabase.url);
+    const endpoint = new URL('/api/ministry-feed', window.location.origin);
+    const apiBaseUrl = environment.cloudflare.apiBaseUrl.replace(/\/$/, '');
+
+    if (apiBaseUrl) {
+      endpoint.href = `${apiBaseUrl}/api/ministry-feed`;
+    }
+
     endpoint.searchParams.set('slug', slug);
 
     const response = await fetch(endpoint.toString(), {

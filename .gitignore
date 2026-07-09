@@ -1,7 +1,9 @@
 node_modules/
 dist/
 .angular/
+.wrangler/
 .env
 .DS_Store
 coverage/
 backups/
+cloudflare/exports/

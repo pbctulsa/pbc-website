@@ -3,7 +3,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Song } from '@models/song.model';
-import { SupabaseService } from '@services/supabase.service';
+import { CloudflareDataService } from '@services/cloudflare-data.service';
 
 @Component({
   selector: 'app-song-detail',
@@ -14,7 +14,7 @@ import { SupabaseService } from '@services/supabase.service';
 })
 export class SongDetailComponent {
   private readonly route = inject(ActivatedRoute);
-  private readonly supabaseService = inject(SupabaseService);
+  private readonly dataService = inject(CloudflareDataService);
 
   protected readonly song = signal<Song | null>(null);
   protected readonly errorMessage = signal('');
@@ -50,14 +50,14 @@ export class SongDetailComponent {
     }
 
     try {
-      const song = await this.supabaseService.getSongById(id);
+      const song = await this.dataService.getSongById(id);
       this.song.set(song);
 
       if (!song) {
         this.errorMessage.set('Song not found.');
       }
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unable to load this song from Supabase.';
+      const message = error instanceof Error ? error.message : 'Unable to load this song from Cloudflare.';
       this.errorMessage.set(message);
     } finally {
       this.isLoading.set(false);
@@ -118,7 +118,7 @@ export class SongDetailComponent {
     this.suggestionMessage.set('');
 
     try {
-      await this.supabaseService.submitSongEditSuggestion({
+      await this.dataService.submitSongEditSuggestion({
         song,
         suggested,
         submitterName: this.suggestion.submitterName,

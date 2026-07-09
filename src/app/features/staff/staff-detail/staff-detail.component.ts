@@ -2,7 +2,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { StaffMember, StaffTerm } from '@models/staff-member.model';
-import { SupabaseService } from '@services/supabase.service';
+import { CloudflareDataService } from '@services/cloudflare-data.service';
 
 @Component({
   selector: 'app-staff-detail',
@@ -13,7 +13,7 @@ import { SupabaseService } from '@services/supabase.service';
 })
 export class StaffDetailComponent {
   private readonly route = inject(ActivatedRoute);
-  private readonly supabaseService = inject(SupabaseService);
+  private readonly dataService = inject(CloudflareDataService);
 
   protected readonly staff = signal<StaffMember | null>(null);
   protected readonly errorMessage = signal('');
@@ -62,14 +62,14 @@ export class StaffDetailComponent {
     }
 
     try {
-      const staff = await this.supabaseService.getStaffById(id);
+      const staff = await this.dataService.getStaffById(id);
       this.staff.set(staff);
 
       if (!staff) {
         this.errorMessage.set('Staff profile not found.');
       }
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unable to load this staff profile from Supabase.';
+      const message = error instanceof Error ? error.message : 'Unable to load this staff profile from Cloudflare.';
       this.errorMessage.set(message);
     } finally {
       this.isLoading.set(false);

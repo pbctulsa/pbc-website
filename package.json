@@ -6,8 +6,12 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "songs:admin": "node scripts/songs-admin.mjs",
-    "staff:admin": "node scripts/staff-admin.mjs",
+    "pages:dev": "npm run build && wrangler pages dev dist/pbc-website/browser",
+    "db:migrate:local": "wrangler d1 migrations apply pbc-website --local",
+    "db:migrate:remote": "wrangler d1 migrations apply pbc-website --remote",
+    "db:import:supabase": "node scripts/migrate-supabase-to-d1.mjs",
+    "songs:admin": "node scripts/d1-admin.mjs songs",
+    "staff:admin": "node scripts/d1-admin.mjs staff",
     "watch": "ng build --watch --configuration development"
   },
   "dependencies": {
@@ -18,7 +22,6 @@
     "@angular/forms": "^18.2.13",
     "@angular/platform-browser": "^18.2.13",
     "@angular/router": "^18.2.13",
-    "@supabase/supabase-js": "^2.49.1",
     "rxjs": "~7.8.1",
     "tslib": "^2.6.3",
     "zone.js": "~0.14.10"
@@ -28,6 +31,7 @@
     "@angular/cli": "^18.2.13",
     "@angular/compiler-cli": "^18.2.13",
     "@types/node": "^22.10.2",
-    "typescript": "~5.5.4"
+    "typescript": "~5.5.4",
+    "wrangler": "^4.110.0"
   }
 }
