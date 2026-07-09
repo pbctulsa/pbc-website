@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '@environments/environment';
 import { StaffMember, StaffTerm } from '@models/staff-member.model';
 import { Song } from '@models/song.model';
@@ -26,46 +25,12 @@ type StaffTermRow = Record<string, unknown>;
 @Injectable({
   providedIn: 'root'
 })
-export class SupabaseService {
-  private client?: SupabaseClient;
-  private readonly songsTable = environment.supabase.songsTable;
-  private readonly songEditSuggestionsTable = 'song_edit_suggestions';
-  private readonly staffTable = environment.supabase.staffTable || 'staff';
-
-  get supabase(): SupabaseClient {
-    return this.getClient();
-  }
+export class CloudflareDataService {
+  private readonly apiBaseUrl = environment.cloudflare.apiBaseUrl.replace(/\/$/, '');
 
   async getSongs(): Promise<{ songs: Song[]; total: number }> {
-    const pageSize = 1000;
-    const allRows: SongRow[] = [];
-    let total = 0;
-    let page = 0;
-
-    while (true) {
-      const from = page * pageSize;
-      const to = from + pageSize - 1;
-      const { data, error, count } = await this.getClient()
-        .from(this.songsTable)
-        .select('*', { count: page === 0 ? 'exact' : undefined })
-        .range(from, to);
-
-      if (error) {
-        throw error;
-      }
-
-      if (page === 0) {
-        total = count ?? 0;
-      }
-
-      allRows.push(...((data ?? []) as SongRow[]));
-
-      if (!data || data.length < pageSize) {
-        break;
-      }
-
-      page += 1;
-    }
+    const data = await this.fetchJson<{ songs?: SongRow[]; total?: number }>('/api/songs');
+    const allRows = data.songs ?? [];
 
     const songs = allRows
       .map((row) => this.mapSongRow(row))
@@ -73,22 +38,21 @@ export class SupabaseService {
 
     return {
       songs,
-      total: total || songs.length
+      total: data.total ?? songs.length
     };
   }
 
   async getSongById(id: string): Promise<Song | null> {
-    const { data, error } = await this.getClient()
-      .from(this.songsTable)
-      .select('*')
-      .eq('id', id)
-      .maybeSingle();
+    const response = await fetch(this.url(`/api/songs/${encodeURIComponent(id)}`), {
+      headers: { Accept: 'application/json' }
+    });
 
-    if (error) {
-      throw error;
+    if (response.status === 404) {
+      return null;
     }
 
-    return data ? this.mapSongRow(data) : null;
+    const data = await this.parseResponse<{ song?: SongRow }>(response);
+    return data.song ? this.mapSongRow(data.song) : null;
   }
 
   async submitSongEditSuggestion(suggestion: SongEditSuggestion): Promise<void> {
@@ -101,70 +65,40 @@ export class SupabaseService {
       lyrics: song.lyrics || ''
     };
 
-    const { error } = await this.getClient()
-      .from(this.songEditSuggestionsTable)
-      .insert({
-        song_id: song.id,
-        song_title: song.title,
-        song_number: song.number ?? null,
-        original_fields: original,
-        suggested_fields: suggested,
-        submitter_name: this.blankToNull(suggestion.submitterName),
-        submitter_email: this.blankToNull(suggestion.submitterEmail),
-        note: this.blankToNull(suggestion.note),
-        status: 'pending'
-      });
-
-    if (error) {
-      throw error;
-    }
+    await this.fetchJson('/api/song-edit-suggestions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        songId: song.id,
+        songTitle: song.title,
+        songNumber: song.number ?? null,
+        originalFields: original,
+        suggestedFields: suggested,
+        submitterName: this.blankToNull(suggestion.submitterName),
+        submitterEmail: this.blankToNull(suggestion.submitterEmail),
+        note: this.blankToNull(suggestion.note)
+      })
+    });
   }
 
   async getStaff(): Promise<StaffMember[]> {
-    const { data, error } = await this.getClient()
-      .from(this.staffTable)
-      .select(this.staffSelect())
-      .eq('is_published', true)
-      .order('sort_order', { ascending: true });
-
-    if (error) {
-      throw error;
-    }
-
-    return ((data ?? []) as unknown as StaffRow[]).map((row) => this.mapStaffRow(row));
+    const data = await this.fetchJson<{ staff?: StaffRow[] }>('/api/staff');
+    return (data.staff ?? []).map((row) => this.mapStaffRow(row));
   }
 
   async getStaffById(id: string): Promise<StaffMember | null> {
-    const { data, error } = await this.getClient()
-      .from(this.staffTable)
-      .select(this.staffSelect())
-      .eq('id', id)
-      .eq('is_published', true)
-      .maybeSingle();
+    const response = await fetch(this.url(`/api/staff/${encodeURIComponent(id)}`), {
+      headers: { Accept: 'application/json' }
+    });
 
-    if (error) {
-      throw error;
+    if (response.status === 404) {
+      return null;
     }
 
-    return data ? this.mapStaffRow(data as unknown as StaffRow) : null;
-  }
-
-  private getClient(): SupabaseClient {
-    if (this.client) {
-      return this.client;
-    }
-
-    if (
-      !environment.supabase.url ||
-      !environment.supabase.anonKey ||
-      environment.supabase.url === 'YOUR_SUPABASE_URL' ||
-      environment.supabase.anonKey === 'YOUR_SUPABASE_ANON_KEY'
-    ) {
-      throw new Error('Supabase URL and anon key are not configured.');
-    }
-
-    this.client = createClient(environment.supabase.url, environment.supabase.anonKey);
-    return this.client;
+    const data = await this.parseResponse<{ staff?: StaffRow }>(response);
+    return data.staff ? this.mapStaffRow(data.staff) : null;
   }
 
   private mapSongRow(row: SongRow): Song {
@@ -195,8 +129,8 @@ export class SupabaseService {
         return aOrder - bOrder;
       }
 
-      const aCurrent = a['is_current'] === true ? 1 : 0;
-      const bCurrent = b['is_current'] === true ? 1 : 0;
+      const aCurrent = this.isTrue(a['is_current']) ? 1 : 0;
+      const bCurrent = this.isTrue(b['is_current']) ? 1 : 0;
 
       if (aCurrent !== bCurrent) {
         return bCurrent - aCurrent;
@@ -205,10 +139,10 @@ export class SupabaseService {
       return (this.firstNumber(b, ['term_start_year']) || 0) - (this.firstNumber(a, ['term_start_year']) || 0);
         })
       : [];
-    const currentTerms = terms.filter((term) => term['is_current'] === true);
+    const currentTerms = terms.filter((term) => this.isTrue(term['is_current']));
     const currentTerm =
       currentTerms[0] ||
-      terms.find((term) => term['is_current'] !== false) ||
+      terms.find((term) => this.isTrue(term['is_current'])) ||
       terms[0];
     const currentDepartments = Array.from(
       new Set(currentTerms.flatMap((term) => this.firstStringArray(term, ['departments'])))
@@ -243,12 +177,8 @@ export class SupabaseService {
       termStartYear: this.firstNumber(row, ['term_start_year']),
       termEndYear: this.firstNumber(row, ['term_end_year']),
       order: this.firstNumber(row, ['order', 'term_order']),
-      isCurrent: row['is_current'] === true
+      isCurrent: this.isTrue(row['is_current'])
     };
-  }
-
-  private staffSelect(): string {
-    return '*,staff_terms(role,department,departments,bylaw,term_start_year,term_end_year,"order",is_current)';
   }
 
   private firstString(row: SongRow, keys: string[]): string | undefined {
@@ -293,9 +223,56 @@ export class SupabaseService {
           .map((item) => item.trim())
           .filter(Boolean);
       }
+
+      if (typeof value === 'string' && value.trim()) {
+        try {
+          const parsed = JSON.parse(value);
+
+          if (Array.isArray(parsed)) {
+            return parsed
+              .filter((item): item is string => typeof item === 'string')
+              .map((item) => item.trim())
+              .filter(Boolean);
+          }
+        } catch {
+          return value
+            .split(',')
+            .map((item) => item.trim())
+            .filter(Boolean);
+        }
+      }
     }
 
     return [];
+  }
+
+  private async fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
+    return this.parseResponse<T>(
+      await fetch(this.url(path), {
+        headers: {
+          Accept: 'application/json',
+          ...init?.headers
+        },
+        ...init
+      })
+    );
+  }
+
+  private async parseResponse<T>(response: Response): Promise<T> {
+    if (!response.ok) {
+      const body = await response.text();
+      throw new Error(body || 'Request failed.');
+    }
+
+    return (await response.json()) as T;
+  }
+
+  private url(path: string): string {
+    return `${this.apiBaseUrl}${path}`;
+  }
+
+  private isTrue(value: unknown): boolean {
+    return value === true || value === 1 || value === '1';
   }
 
   private blankToNull(value: string | undefined): string | null {

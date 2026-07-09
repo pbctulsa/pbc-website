@@ -1,0 +1,8 @@
+name = "pbc-website"
+pages_build_output_dir = "dist/pbc-website/browser"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "pbc-website"
+database_id = "d5dbfd79-f418-4c6d-8543-21ce1a4bb57e"
+migrations_dir = "cloudflare/migrations"

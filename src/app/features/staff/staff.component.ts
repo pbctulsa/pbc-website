@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { StaffMember, StaffTerm } from '@models/staff-member.model';
-import { SupabaseService } from '@services/supabase.service';
+import { CloudflareDataService } from '@services/cloudflare-data.service';
 import { map } from 'rxjs';
 
 interface StaffListingEntry {
@@ -24,7 +24,7 @@ interface StaffListingEntry {
 })
 export class StaffComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
-  private readonly supabaseService = inject(SupabaseService);
+  private readonly dataService = inject(CloudflareDataService);
   protected readonly isLoading = signal(true);
   protected readonly error = signal<string | null>(null);
   protected readonly staff = signal<StaffMember[]>(this.fallbackStaff());
@@ -56,13 +56,13 @@ export class StaffComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     try {
-      const staff = await this.supabaseService.getStaff();
+      const staff = await this.dataService.getStaff();
 
       if (staff.length) {
         this.staff.set(staff);
       }
     } catch (error) {
-      this.error.set('Showing local staff data until Supabase staff migration is complete.');
+      this.error.set('Showing local staff data until Cloudflare staff data is available.');
       console.error(error);
     } finally {
       this.isLoading.set(false);

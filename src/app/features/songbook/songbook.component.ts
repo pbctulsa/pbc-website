@@ -3,7 +3,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Song } from '@models/song.model';
-import { SupabaseService } from '@services/supabase.service';
+import { CloudflareDataService } from '@services/cloudflare-data.service';
 
 @Component({
   selector: 'app-songbook',
@@ -13,7 +13,7 @@ import { SupabaseService } from '@services/supabase.service';
   styleUrl: './songbook.component.scss'
 })
 export class SongbookComponent {
-  private readonly supabaseService = inject(SupabaseService);
+  private readonly dataService = inject(CloudflareDataService);
 
   protected readonly songs = signal<Song[]>([]);
   protected readonly searchTerm = signal('');
@@ -67,11 +67,11 @@ export class SongbookComponent {
 
   private async loadSongs(): Promise<void> {
     try {
-      const { songs, total } = await this.supabaseService.getSongs();
+      const { songs, total } = await this.dataService.getSongs();
       this.songs.set(songs);
       this.totalSongs.set(total);
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unable to load songs from Supabase.';
+      const message = error instanceof Error ? error.message : 'Unable to load songs from Cloudflare.';
       this.errorMessage.set(message);
     } finally {
       this.isLoading.set(false);
