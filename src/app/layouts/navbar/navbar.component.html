@@ -12,7 +12,7 @@
       aria-controls="primary-menu"
       (click)="toggleMenu()"
     >
-      Menu
+      {{ t('nav.menu') }}
     </button>
 
     <ul id="primary-menu" class="nav-links" [class.open]="menuOpen()">
@@ -23,7 +23,7 @@
           [routerLinkActiveOptions]="{ exact: item.path === '/' }"
           (click)="closeMenu()"
         >
-          {{ item.label }}
+          {{ t(item.labelKey) }}
         </a>
         <ul class="submenu" *ngIf="item.children">
           <li *ngFor="let child of item.children">
@@ -33,7 +33,7 @@
               routerLinkActive="active"
               (click)="closeMenu()"
             >
-              {{ child.label }}
+              {{ t(child.labelKey) }}
             </a>
             <a
               *ngIf="child.external"
@@ -42,13 +42,24 @@
               rel="noreferrer"
               (click)="closeMenu()"
             >
-              {{ child.label }}
+              {{ t(child.labelKey) }}
             </a>
           </li>
         </ul>
       </li>
     </ul>
 
-    <a class="give-link" [href]="church.links.giving" target="_blank" rel="noreferrer">Give</a>
+    <div class="nav-actions">
+      <button
+        class="language-toggle"
+        type="button"
+        [attr.aria-label]="t('language.toggleLabel')"
+        (click)="toggleLanguage()"
+      >
+        <span [class.active]="languageService.language() === 'en'">{{ t('language.english') }}</span>
+        <span [class.active]="languageService.language() === 'tcz'">{{ t('language.thadou') }}</span>
+      </button>
+      <a class="give-link" [href]="church.links.giving" target="_blank" rel="noreferrer">{{ t('nav.give') }}</a>
+    </div>
   </nav>
 </header>

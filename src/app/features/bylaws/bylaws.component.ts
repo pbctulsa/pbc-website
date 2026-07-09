@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { churchInfo } from '@core/church-info';
+import { LanguageService, TranslationKey } from '@services/language.service';
 
 @Component({
   selector: 'app-bylaws',
@@ -8,19 +9,18 @@ import { churchInfo } from '@core/church-info';
   template: `
     <section class="page-section">
       <div class="section-inner">
-        <p class="eyebrow">Governance</p>
-        <h1 class="section-title">Bylaws and policy</h1>
+        <p class="eyebrow">{{ t('bylaws.eyebrow') }}</p>
+        <h1 class="section-title">{{ t('bylaws.title') }}</h1>
         <p class="lead">
-          View or download the current {{ church.shortName }} bylaws and policy document approved
-          January 11, 2026.
+          {{ t('bylaws.leadPrefix') }} {{ church.shortName }} {{ t('bylaws.leadSuffix') }}
         </p>
 
         <div class="bylaws-actions" aria-label="Bylaws document actions">
           <a class="button-link" [href]="church.links.bylaws" target="_blank" rel="noreferrer">
-            View PDF
+            {{ t('bylaws.viewPdf') }}
           </a>
           <a class="button-link secondary" [href]="church.links.bylaws" download>
-            Download Bylaws
+            {{ t('bylaws.download') }}
           </a>
         </div>
 
@@ -81,7 +81,11 @@ export class BylawsComponent {
   protected readonly church = churchInfo;
   protected readonly bylawsViewerUrl: SafeResourceUrl;
 
-  constructor(sanitizer: DomSanitizer) {
+  constructor(sanitizer: DomSanitizer, private readonly languageService: LanguageService) {
     this.bylawsViewerUrl = sanitizer.bypassSecurityTrustResourceUrl(churchInfo.links.bylaws);
+  }
+
+  protected t(key: TranslationKey): string {
+    return this.languageService.t(key);
   }
 }

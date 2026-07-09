@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { churchInfo } from '@core/church-info';
+import { LanguageService, TranslationKey } from '@services/language.service';
 
 @Component({
   selector: 'app-sermons',
@@ -7,10 +8,10 @@ import { churchInfo } from '@core/church-info';
   template: `
     <section class="page-section">
       <div class="section-inner">
-        <p class="eyebrow">Sermons</p>
-        <h1 class="section-title">Sermons and live worship</h1>
+        <p class="eyebrow">{{ t('sermons.eyebrow') }}</p>
+        <h1 class="section-title">{{ t('sermons.title') }}</h1>
         <p class="lead">
-          Use this page for sermon archives, livestream embeds, podcast links, and worship media.
+          {{ t('sermons.lead') }}
         </p>
         <img class="sermons-photo" [src]="sermonsPhoto.src" [alt]="sermonsPhoto.alt" loading="lazy">
 
@@ -50,4 +51,10 @@ export class SermonsComponent {
     src: 'images/church-pics/1031755085779997.jpg',
     alt: 'Peniel Baptist Church congregation gathered for preaching and worship'
   };
+
+  constructor(private readonly languageService: LanguageService) {}
+
+  protected t(key: TranslationKey): string {
+    return this.languageService.t(key);
+  }
 }

@@ -7,3 +7,4 @@ dist/
 coverage/
 backups/
 cloudflare/exports/
+.tmp/

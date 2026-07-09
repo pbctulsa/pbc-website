@@ -5,6 +5,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { StaffMember, StaffTerm } from '@models/staff-member.model';
 import { CloudflareDataService } from '@services/cloudflare-data.service';
+import { LanguageService, TranslationKey } from '@services/language.service';
 import { map } from 'rxjs';
 
 interface StaffListingEntry {
@@ -25,6 +26,7 @@ interface StaffListingEntry {
 export class StaffComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly dataService = inject(CloudflareDataService);
+  private readonly languageService = inject(LanguageService);
   protected readonly isLoading = signal(true);
   protected readonly error = signal<string | null>(null);
   protected readonly staff = signal<StaffMember[]>(this.fallbackStaff());
@@ -62,7 +64,7 @@ export class StaffComponent implements OnInit {
         this.staff.set(staff);
       }
     } catch (error) {
-      this.error.set('Showing local staff data until Cloudflare staff data is available.');
+      this.error.set(this.t('staff.fallbackMessage'));
       console.error(error);
     } finally {
       this.isLoading.set(false);
@@ -231,6 +233,21 @@ export class StaffComponent implements OnInit {
     this.departmentFilter.set(value);
   }
 
+  protected t(key: TranslationKey): string {
+    return this.languageService.t(key);
+  }
+
+  protected departmentLabel(value: string): string {
+    switch (value) {
+      case 'All':
+        return this.t('staff.allDepartments');
+      case 'Church Executive':
+        return this.t('staff.churchExecutive');
+      default:
+        return value;
+    }
+  }
+
   protected trackByEntry(_index: number, entry: StaffListingEntry): string {
     return entry.key;
   }
@@ -259,7 +276,7 @@ export class StaffComponent implements OnInit {
     if (!selectedDepartment && grouped.size === 0) {
       return [
         {
-          title: this.showPastTerms() ? 'Previous Staff' : 'All Staff',
+          title: this.showPastTerms() ? this.t('staff.previousStaff') : this.t('staff.allStaff'),
           entries: [...entries].sort((left, right) => this.compareEntry(left, right))
         }
       ];
@@ -282,7 +299,7 @@ export class StaffComponent implements OnInit {
     const sections: Array<{ title: string; entries: StaffListingEntry[] }> = [];
 
     if (executive.length) {
-      sections.push({ title: 'Church Executive', entries: executive });
+      sections.push({ title: this.t('staff.churchExecutive'), entries: executive });
     }
 
     sections.push(...otherDepartments);

@@ -1,10 +1,10 @@
 <section class="page-section">
   <div class="section-inner ministries-page">
-    <p class="eyebrow">Ministries</p>
-    <h1 class="section-title">Church ministries</h1>
+    <p class="eyebrow">{{ t('ministries.eyebrow') }}</p>
+    <h1 class="section-title">{{ t('ministries.title') }}</h1>
 
     <ng-container *ngIf="selectedMinistry() as ministry; else overview">
-      <a class="back-link" routerLink="/ministries">Back to ministries</a>
+      <a class="back-link" routerLink="/ministries">{{ t('ministries.back') }}</a>
 
       <div class="ministry-detail">
         <div class="detail-media">
@@ -26,14 +26,14 @@
           <p class="detail-overview">{{ ministry.overview }}</p>
 
           <section class="focus-band">
-            <h2>Bylaw focus</h2>
+            <h2>{{ t('ministries.bylawFocus') }}</h2>
             <ul>
               <li *ngFor="let item of ministry.bylawFocus">{{ item }}</li>
             </ul>
           </section>
 
           <section class="emphasis-band">
-            <h2>What this ministry emphasizes</h2>
+            <h2>{{ t('ministries.emphasis') }}</h2>
             <div class="tag-list">
               <span *ngFor="let item of ministry.emphasis">{{ item }}</span>
             </div>
@@ -42,21 +42,21 @@
           <section class="social-band" *ngIf="ministry.social as social">
             <div class="social-header">
               <div>
-                <h2>Social updates</h2>
+                <h2>{{ t('ministries.socialUpdates') }}</h2>
                 <p class="social-intro">
-                  Recent ministry posts appear here as native cards, so the layout matches the rest of the site.
+                  {{ t('ministries.socialIntro') }}
                 </p>
               </div>
               <div class="social-actions">
-                <a *ngIf="social.facebookPageUrl as facebookPageUrl" [href]="facebookPageUrl" target="_blank" rel="noreferrer">Open Facebook</a>
-                <a *ngIf="social.instagramUrl as instagramUrl" [href]="instagramUrl" target="_blank" rel="noreferrer">Open Instagram</a>
+                <a *ngIf="social.facebookPageUrl as facebookPageUrl" [href]="facebookPageUrl" target="_blank" rel="noreferrer">{{ t('ministries.openFacebook') }}</a>
+                <a *ngIf="social.instagramUrl as instagramUrl" [href]="instagramUrl" target="_blank" rel="noreferrer">{{ t('ministries.openInstagram') }}</a>
               </div>
             </div>
 
-            <p class="status" *ngIf="feedLoading()">Loading ministry updates...</p>
+            <p class="status" *ngIf="feedLoading()">{{ t('ministries.loading') }}</p>
             <p class="status warning" *ngIf="feedError()">{{ feedError() }}</p>
             <p class="status" *ngIf="!feedLoading() && !feedError() && feedItems().length === 0">
-              No recent posts available yet.
+              {{ t('ministries.noPosts') }}
             </p>
 
             <div class="social-feed-grid" *ngIf="feedItems().length">
@@ -74,14 +74,14 @@
                   *ngIf="item.imageUrl || item.thumbnailUrl"
                   class="social-feed-image"
                   [src]="item.imageUrl || item.thumbnailUrl"
-                  [alt]="item.message || 'Social update image'"
+                  [alt]="item.message || t('ministries.socialImageAlt')"
                   loading="lazy"
                 >
 
-                <p class="social-feed-message">{{ item.message || 'Open the post to view the latest update.' }}</p>
+                <p class="social-feed-message">{{ item.message || t('ministries.openPostFallback') }}</p>
 
                 <div class="social-feed-actions">
-                  <a [href]="item.permalinkUrl" target="_blank" rel="noreferrer">Open post</a>
+                  <a [href]="item.permalinkUrl" target="_blank" rel="noreferrer">{{ t('ministries.openPost') }}</a>
                 </div>
               </article>
             </div>
@@ -92,13 +92,12 @@
 
     <ng-template #overview>
       <p class="status warning" *ngIf="isInvalidSlug()">
-        Ministry not found.
+        {{ t('ministries.notFound') }}
       </p>
 
       <ng-container *ngIf="!isInvalidSlug()">
       <p class="lead">
-        These ministries are organized to help our church live out the Gospel through worship, teaching,
-        fellowship, service, and discipleship.
+        {{ t('ministries.lead') }}
       </p>
 
       <div class="ministry-grid">

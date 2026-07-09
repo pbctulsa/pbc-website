@@ -1,22 +1,22 @@
 <section class="page-section">
   <div class="section-inner">
-    <p class="eyebrow">Leadership</p>
-    <h1 class="section-title">Staff and church officers</h1>
-    <p class="lead">Current staff and officers, with leadership term history from the church database.</p>
+    <p class="eyebrow">{{ t('staff.eyebrow') }}</p>
+    <h1 class="section-title">{{ t('staff.title') }}</h1>
+    <p class="lead">{{ t('staff.lead') }}</p>
 
     <div class="staff-controls">
       <label class="filter-field">
-        <span>Department</span>
+        <span>{{ t('staff.department') }}</span>
         <select [ngModel]="departmentFilter()" (ngModelChange)="updateDepartmentFilter($event)">
-          <option *ngFor="let department of departmentOptions()" [value]="department">{{ department }}</option>
+          <option *ngFor="let department of departmentOptions()" [value]="department">{{ departmentLabel(department) }}</option>
         </select>
       </label>
     </div>
 
-    <p class="status" *ngIf="isLoading()">Loading staff...</p>
+    <p class="status" *ngIf="isLoading()">{{ t('staff.loading') }}</p>
     <p class="status" *ngIf="error()">{{ error() }}</p>
     <p class="status" *ngIf="!isLoading() && !error() && staffSections().length === 0">
-      No staff found for this department.
+      {{ t('staff.noStaff') }}
     </p>
 
     <section class="department-section" *ngFor="let section of staffSections()">
@@ -31,7 +31,7 @@
             <h3>{{ entry.member.name }}</h3>
             <p class="role">{{ entry.role }}</p>
             <div class="departments" *ngIf="departmentLabels(entry).length">
-              <span class="department-chip" *ngFor="let label of departmentLabels(entry)">{{ label }}</span>
+              <span class="department-chip" *ngFor="let label of departmentLabels(entry)">{{ departmentLabel(label) }}</span>
             </div>
             <p class="email" *ngIf="entry.member.email">{{ entry.member.email }}</p>
           </div>
@@ -40,8 +40,8 @@
     </section>
 
     <div class="staff-footer-link">
-      <a *ngIf="!showPastTerms()" [routerLink]="['/about/staff']" [queryParams]="{ past: 1 }">View previous terms</a>
-      <a *ngIf="showPastTerms()" [routerLink]="['/about/staff']">View current staff</a>
+      <a *ngIf="!showPastTerms()" [routerLink]="['/about/staff']" [queryParams]="{ past: 1 }">{{ t('staff.viewPreviousTerms') }}</a>
+      <a *ngIf="showPastTerms()" [routerLink]="['/about/staff']">{{ t('staff.viewCurrentStaff') }}</a>
     </div>
   </div>
 </section>

@@ -2,9 +2,10 @@ import { NgFor, NgIf } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { churchInfo } from '@core/church-info';
+import { LanguageService, TranslationKey } from '@services/language.service';
 
 interface NavItem {
-  label: string;
+  labelKey: TranslationKey;
   path: string;
   children?: NavItem[];
   external?: boolean;
@@ -21,32 +22,42 @@ export class NavbarComponent {
   protected readonly church = churchInfo;
   protected readonly menuOpen = signal(false);
   protected readonly navItems: NavItem[] = [
-    { label: 'Home', path: '/' },
+    { labelKey: 'nav.home', path: '/' },
     {
-      label: 'About',
+      labelKey: 'nav.about',
       path: '/about',
       children: [
-        { label: 'Who We Are', path: '/about' },
-        { label: 'Staff', path: '/about/staff' },
-        { label: 'Bylaws', path: '/about/bylaws' }
+        { labelKey: 'nav.whoWeAre', path: '/about' },
+        { labelKey: 'nav.staff', path: '/about/staff' },
+        { labelKey: 'nav.bylaws', path: '/about/bylaws' }
       ]
     },
     {
-      label: 'Ministries',
+      labelKey: 'nav.ministries',
       path: '/ministries',
       children: [
-        { label: 'Overview', path: '/ministries' },
-        { label: 'Mission', path: '/ministries/mission' },
-        { label: 'Men', path: '/ministries/men' },
-        { label: 'Women', path: '/ministries/women' },
-        { label: 'Khanglai', path: '/ministries/khanglai' },
-        { label: 'Children', path: '/ministries/children' }
+        { labelKey: 'nav.overview', path: '/ministries' },
+        { labelKey: 'nav.mission', path: '/ministries/mission' },
+        { labelKey: 'nav.men', path: '/ministries/men' },
+        { labelKey: 'nav.women', path: '/ministries/women' },
+        { labelKey: 'nav.khanglai', path: '/ministries/khanglai' },
+        { labelKey: 'nav.children', path: '/ministries/children' }
       ]
     },
-    { label: 'Sermons', path: '/sermons' },
-    { label: 'Songbook', path: '/songbook' },
-    { label: 'Contact', path: '/contact' }
+    { labelKey: 'nav.sermons', path: '/sermons' },
+    { labelKey: 'nav.songbook', path: '/songbook' },
+    { labelKey: 'nav.contact', path: '/contact' }
   ];
+
+  constructor(protected readonly languageService: LanguageService) {}
+
+  protected t(key: TranslationKey): string {
+    return this.languageService.t(key);
+  }
+
+  protected toggleLanguage(): void {
+    this.languageService.toggleLanguage();
+  }
 
   protected toggleMenu(): void {
     this.menuOpen.update((open) => !open);

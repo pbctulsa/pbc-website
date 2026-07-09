@@ -9,26 +9,26 @@
   </div>
 
   <div class="hero-inner">
-    <p class="eyebrow">Welcome</p>
+    <p class="eyebrow">{{ t('home.welcome') }}</p>
     <h1>{{ church.name }}</h1>
     <p>
-      {{ church.motto }}
+      {{ t('home.motto') }}
     </p>
     <div class="hero-actions">
-      <a class="button-link" routerLink="/about">Plan a Visit</a>
-      <a class="button-link secondary" [href]="church.links.giving" target="_blank" rel="noreferrer">Give Online</a>
+      <a class="button-link" routerLink="/about">{{ t('home.planVisit') }}</a>
+      <a class="button-link secondary" [href]="church.links.giving" target="_blank" rel="noreferrer">{{ t('home.giveOnline') }}</a>
     </div>
     <div class="hero-details" aria-label="Service information">
       <div>
-        <span>Sunday Worship</span>
+        <span>{{ t('home.sundayWorship') }}</span>
         <strong>11:00 AM</strong>
       </div>
       <div>
-        <span>English Worship</span>
-        <strong>3rd Sunday</strong>
+        <span>{{ t('home.englishWorship') }}</span>
+        <strong>{{ t('home.thirdSunday') }}</strong>
       </div>
       <div>
-        <span>Wednesday Bible Study</span>
+        <span>{{ t('home.wednesdayBibleStudy') }}</span>
         <strong>6:30 PM</strong>
       </div>
     </div>
@@ -38,14 +38,14 @@
 <section class="page-section latest-video">
   <div class="section-inner video-grid">
     <div>
-      <p class="eyebrow">Media</p>
-      <h2>Recent worship and teaching</h2>
+      <p class="eyebrow">{{ t('home.media') }}</p>
+      <h2>{{ t('home.recentTeaching') }}</h2>
       <p>
-        Follow along with recent services and messages from the church YouTube channel.
+        {{ t('home.mediaCopy') }}
       </p>
       <div class="media-links">
-        <a class="button-link" [href]="church.links.youtube" target="_blank" rel="noreferrer">Open YouTube Channel</a>
-        <a class="button-link secondary" [href]="church.links.podcast" target="_blank" rel="noreferrer">Listen to Podcast</a>
+        <a class="button-link" [href]="church.links.youtube" target="_blank" rel="noreferrer">{{ t('home.openYoutube') }}</a>
+        <a class="button-link secondary" [href]="church.links.podcast" target="_blank" rel="noreferrer">{{ t('home.listenPodcast') }}</a>
       </div>
     </div>
 
@@ -63,26 +63,26 @@
 <section class="page-section next-steps">
   <div class="section-inner next-steps-grid">
     <div>
-      <p class="eyebrow">Connect</p>
-      <h2>Find what you need next</h2>
-      <p>{{ church.community }}</p>
-      <a class="connect-link" routerLink="/contact">Visit, get directions, and see service times</a>
+      <p class="eyebrow">{{ t('home.connect') }}</p>
+      <h2>{{ t('home.nextTitle') }}</h2>
+      <p>{{ t('home.community') }}</p>
+      <a class="connect-link" routerLink="/contact">{{ t('home.contactCta') }}</a>
     </div>
     <a class="step-link" routerLink="/ministries">
-      <span>Ministries</span>
-      <strong>Explore men, women, Khanglai, children, and mission</strong>
+      <span>{{ t('nav.ministries') }}</span>
+      <strong>{{ t('home.ministriesDetail') }}</strong>
     </a>
     <a class="step-link" routerLink="/sermons">
-      <span>Sermons</span>
-      <strong>Watch and listen to recent messages</strong>
+      <span>{{ t('nav.sermons') }}</span>
+      <strong>{{ t('home.sermonsDetail') }}</strong>
     </a>
     <a class="step-link" routerLink="/songbook">
-      <span>Songbook</span>
-      <strong>Search lyrics and worship songs</strong>
+      <span>{{ t('nav.songbook') }}</span>
+      <strong>{{ t('home.songbookDetail') }}</strong>
     </a>
     <a class="step-link" routerLink="/contact">
-      <span>Contact</span>
-      <strong>Get directions, phone, and service info</strong>
+      <span>{{ t('nav.contact') }}</span>
+      <strong>{{ t('home.contactDetail') }}</strong>
     </a>
   </div>
 </section>
