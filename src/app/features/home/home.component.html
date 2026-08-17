@@ -1,3 +1,52 @@
+<section class="jubilee" aria-labelledby="jubilee-title">
+  <div class="jubilee-inner">
+    <div class="jubilee-copy">
+      <p class="jubilee-kicker">Peniel Baptist Church · 25th Anniversary</p>
+      <h1 id="jubilee-title">Celebrating 25 years of God&rsquo;s faithfulness</h1>
+      <p class="jubilee-scripture">&ldquo;Thus far the Lord has helped us.&rdquo; <span>1 Samuel 7:12</span></p>
+
+      <div class="jubilee-details" aria-label="Jubilee event details">
+        <div>
+          <span>Date</span>
+          <strong>Sunday, October 4, 2026</strong>
+        </div>
+        <div>
+          <span>Time</span>
+          <strong>12:00 PM CDT</strong>
+        </div>
+        <div>
+          <span>Location</span>
+          <strong>Peniel Baptist Church</strong>
+          <small>2140 S. 67th East Ave, Tulsa, OK 74129</small>
+        </div>
+      </div>
+
+      <p class="jubilee-welcome">All are welcome. Join us for this joyful milestone celebration!</p>
+      <div class="jubilee-actions">
+        <a class="button-link jubilee-primary" routerLink="/jubilee">Event details</a>
+        <a
+          class="button-link jubilee-secondary"
+          href="https://www.google.com/maps/dir/?api=1&amp;destination=2140+S+67th+East+Ave,+Tulsa,+OK+74129"
+          target="_blank"
+          rel="noreferrer"
+        >Get directions</a>
+        <a class="button-link jubilee-secondary" [href]="church.links.youtube" target="_blank" rel="noreferrer">Watch live on YouTube</a>
+      </div>
+    </div>
+
+    <a
+      class="jubilee-poster"
+      routerLink="/jubilee"
+      aria-label="View details for the 25th Anniversary Jubilee"
+    >
+      <img
+        src="images/25th-anniversary-jubilee.png"
+        alt="Peniel Baptist Church 25th Anniversary Jubilee flyer with event details for October 4, 2026"
+      >
+    </a>
+  </div>
+</section>
+
 <section class="hero">
   <div class="hero-background" aria-hidden="true">
     <img
@@ -10,7 +59,7 @@
 
   <div class="hero-inner">
     <p class="eyebrow">{{ t('home.welcome') }}</p>
-    <h1>{{ church.name }}</h1>
+    <h2>{{ church.name }}</h2>
     <p>
       {{ t('home.motto') }}
     </p>
