@@ -1,18 +1,18 @@
 <section class="page-section songbook-page">
   <div class="section-inner">
-    <p class="eyebrow">Church Songbook</p>
-    <h1 class="section-title">PBC Songbook</h1>
-    <p class="lead">Search by title, number, author, song type, or lyrics.</p>
+    <p class="eyebrow">{{ t('songbook.eyebrow') }}</p>
+    <h1 class="section-title">{{ t('songbook.title') }}</h1>
+    <p class="lead">{{ t('songbook.lead') }}</p>
 
     <div class="songbook-summary">
-      <span>{{ selectedType() }}</span>
-      <strong>{{ filteredSongs().length }} shown</strong>
-      <strong>{{ totalSongs() || songs().length }} total</strong>
+      <span>{{ typeLabel(selectedType()) }}</span>
+      <strong>{{ filteredSongs().length }} {{ t('songbook.shown') }}</strong>
+      <strong>{{ totalSongs() || songs().length }} {{ t('songbook.total') }}</strong>
     </div>
 
     <div class="songbook-controls">
       <label class="search-field">
-        <span>Search songs</span>
+        <span>{{ t('songbook.searchSongs') }}</span>
         <input
           type="search"
           [ngModel]="searchTerm()"
@@ -22,19 +22,19 @@
       </label>
 
       <label class="type-field">
-        <span>Song type</span>
+        <span>{{ t('songbook.songType') }}</span>
         <select [ngModel]="selectedType()" (ngModelChange)="updateSelectedType($event)">
-          <option *ngFor="let type of songTypes()" [value]="type">{{ type }}</option>
+          <option *ngFor="let type of songTypes()" [value]="type">{{ typeLabel(type) }}</option>
         </select>
       </label>
 
-      <button type="button" (click)="clearFilters()">Clear</button>
+      <button type="button" (click)="clearFilters()">{{ t('songbook.clear') }}</button>
     </div>
 
-    <p class="status" *ngIf="isLoading()">Loading songbook...</p>
+    <p class="status" *ngIf="isLoading()">{{ t('songbook.loading') }}</p>
     <p class="status warning" *ngIf="errorMessage()">{{ errorMessage() }}</p>
     <p class="status" *ngIf="!isLoading() && !errorMessage() && filteredSongs().length === 0">
-      No songs match the current search.
+      {{ t('songbook.noMatches') }}
     </p>
 
     <div class="song-list">
@@ -42,7 +42,7 @@
         <span class="song-number">{{ song.number || '-' }}</span>
         <span>
           <strong>{{ song.title }}</strong>
-          <small>{{ song.author || 'Unknown author' }} <span *ngIf="song.category">- {{ song.category }}</span></small>
+          <small>{{ song.author || t('songbook.unknownAuthor') }} <span *ngIf="song.category">- {{ song.category }}</span></small>
         </span>
       </a>
     </div>

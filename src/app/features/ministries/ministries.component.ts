@@ -6,6 +6,7 @@ import { map } from 'rxjs';
 import { getMinistryBySlug, ministries } from '@core/ministries';
 import { MinistryFeedItem } from '@models/ministry-feed-item.model';
 import { MinistryFeedService } from '@services/ministry-feed.service';
+import { LanguageService, TranslationKey } from '@services/language.service';
 
 @Component({
   selector: 'app-ministries',
@@ -17,6 +18,7 @@ import { MinistryFeedService } from '@services/ministry-feed.service';
 export class MinistriesComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly ministryFeedService = inject(MinistryFeedService);
+  private readonly languageService = inject(LanguageService);
 
   protected readonly ministries = ministries;
   protected readonly feedItems = signal<MinistryFeedItem[]>([]);
@@ -48,6 +50,10 @@ export class MinistriesComponent {
     return `/ministries/${slug}`;
   }
 
+  protected t(key: TranslationKey): string {
+    return this.languageService.t(key);
+  }
+
   private async loadFeed(slug: string): Promise<void> {
     this.feedLoading.set(true);
     this.feedError.set('');
@@ -56,7 +62,7 @@ export class MinistriesComponent {
       const items = await this.ministryFeedService.getFeed(slug);
       this.feedItems.set(items);
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unable to load ministry updates.';
+      const message = error instanceof Error ? error.message : this.t('ministries.feedError');
       this.feedError.set(message);
       this.feedItems.set([]);
     } finally {

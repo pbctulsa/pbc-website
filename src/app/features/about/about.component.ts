@@ -2,6 +2,7 @@ import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { churchInfo } from '@core/church-info';
+import { LanguageService, TranslationKey } from '@services/language.service';
 
 @Component({
   selector: 'app-about',
@@ -10,23 +11,22 @@ import { churchInfo } from '@core/church-info';
   template: `
     <section class="page-section">
       <div class="section-inner">
-        <p class="eyebrow">About</p>
-        <h1 class="section-title">About {{ church.name }}</h1>
+        <p class="eyebrow">{{ t('about.eyebrow') }}</p>
+        <h1 class="section-title">{{ t('about.title') }} {{ church.name }}</h1>
 
         <div class="about-hero">
           <div>
             <p class="lead">
-              {{ church.motto }} We are a mainly Thadou-speaking Baptist church in Tulsa, shaped by
-              worship, evangelism, ministry, discipleship, and fellowship.
+              {{ t('about.lead') }}
             </p>
             <div class="mission-pair">
               <article>
-                <h2>Mission</h2>
-                <p>{{ church.mission }}</p>
+                <h2>{{ t('about.missionTitle') }}</h2>
+                <p>{{ t('about.missionText') }}</p>
               </article>
               <article>
-                <h2>Vision</h2>
-                <p>{{ church.vision }}</p>
+                <h2>{{ t('about.visionTitle') }}</h2>
+                <p>{{ t('about.visionText') }}</p>
               </article>
             </div>
           </div>
@@ -35,19 +35,17 @@ import { churchInfo } from '@core/church-info';
 
         <section class="belief-section" aria-labelledby="belief-heading">
           <div>
-            <p class="eyebrow">What We Believe</p>
-            <h2 id="belief-heading">Rooted in Scripture and centered on Christ</h2>
+            <p class="eyebrow">{{ t('about.beliefEyebrow') }}</p>
+            <h2 id="belief-heading">{{ t('about.beliefTitle') }}</h2>
             <p>
-              We affirm the Holy Bible as the inspired Word of God and the foundation for our faith.
-              As a Baptist church, we receive The Baptist Faith and Message as a general statement of
-              our beliefs.
+              {{ t('about.beliefText') }}
             </p>
           </div>
           <div class="belief-grid">
             <article *ngFor="let belief of beliefs">
-              <span>{{ belief.label }}</span>
-              <h3>{{ belief.title }}</h3>
-              <p>{{ belief.text }}</p>
+              <span>{{ t(belief.label) }}</span>
+              <h3>{{ t(belief.title) }}</h3>
+              <p>{{ t(belief.text) }}</p>
             </article>
           </div>
         </section>
@@ -55,32 +53,26 @@ import { churchInfo } from '@core/church-info';
         <section class="church-life" aria-labelledby="life-heading">
           <img [src]="church.gallery[2].src" [alt]="church.gallery[2].alt" loading="lazy">
           <div>
-            <p class="eyebrow">Church Life</p>
-            <h2 id="life-heading">A family called to worship, serve, and welcome</h2>
+            <p class="eyebrow">{{ t('about.lifeEyebrow') }}</p>
+            <h2 id="life-heading">{{ t('about.lifeTitle') }}</h2>
             <p>
-              Our members commit to protect the unity of the church, share responsibility for its
-              growth, serve with their gifts, and support the church's witness through faithful
-              worship and godly living.
+              {{ t('about.lifeText1') }}
             </p>
             <p>
-              We serve the Tulsa Metropolitan Area, including Asian immigrant families, and welcome
-              people without discrimination because of race, color, national origin, disability, age,
-              or sex.
+              {{ t('about.lifeText2') }}
             </p>
           </div>
         </section>
 
         <section class="affiliation-band" aria-label="Church affiliations">
           <p>
-            {{ church.shortName }} is autonomous and voluntarily cooperates with the Southern Baptist
-            Convention, the Baptist General Convention of Oklahoma, and the Tulsa Metro Baptist
-            Association.
+            {{ church.shortName }} {{ t('about.affiliationText') }}
           </p>
           <p class="bylaws-note">
-            The current bylaws and policy document was approved January 11, 2026.
+            {{ t('about.bylawsNote') }}
           </p>
           <a class="button-link" routerLink="/about/bylaws">
-            View and Download Bylaws
+            {{ t('about.bylawsButton') }}
           </a>
         </section>
 
@@ -283,24 +275,30 @@ export class AboutComponent {
   protected readonly church = churchInfo;
   protected readonly beliefs = [
     {
-      label: 'Scripture',
-      title: 'The Bible is our foundation',
-      text: 'We affirm the Holy Bible as God-inspired and the basis for what we believe, teach, and practice.'
+      label: 'about.belief1Label',
+      title: 'about.belief1Title',
+      text: 'about.belief1Text'
     },
     {
-      label: 'Mission',
-      title: 'Great Commandment and Great Commission',
-      text: 'We seek to love God, love our neighbors, make disciples, and share the Gospel of Jesus Christ.'
+      label: 'about.belief2Label',
+      title: 'about.belief2Title',
+      text: 'about.belief2Text'
     },
     {
-      label: 'Formation',
-      title: 'Growing as disciples',
-      text: 'We gather for worship, learn together, serve with our gifts, and encourage one another toward faithful living.'
+      label: 'about.belief3Label',
+      title: 'about.belief3Title',
+      text: 'about.belief3Text'
     },
     {
-      label: 'Community',
-      title: 'A welcoming church family',
-      text: 'We want every person and family who visits to be received warmly and pointed toward life in Christ.'
+      label: 'about.belief4Label',
+      title: 'about.belief4Title',
+      text: 'about.belief4Text'
     }
-  ];
+  ] as const;
+
+  constructor(private readonly languageService: LanguageService) {}
+
+  protected t(key: TranslationKey): string {
+    return this.languageService.t(key);
+  }
 }

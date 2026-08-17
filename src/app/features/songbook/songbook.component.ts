@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Song } from '@models/song.model';
 import { CloudflareDataService } from '@services/cloudflare-data.service';
+import { LanguageService, TranslationKey } from '@services/language.service';
 
 @Component({
   selector: 'app-songbook',
@@ -14,6 +15,7 @@ import { CloudflareDataService } from '@services/cloudflare-data.service';
 })
 export class SongbookComponent {
   private readonly dataService = inject(CloudflareDataService);
+  private readonly languageService = inject(LanguageService);
 
   protected readonly songs = signal<Song[]>([]);
   protected readonly searchTerm = signal('');
@@ -65,13 +67,21 @@ export class SongbookComponent {
     this.selectedType.set('All Song Type');
   }
 
+  protected t(key: TranslationKey): string {
+    return this.languageService.t(key);
+  }
+
+  protected typeLabel(type: string): string {
+    return type === 'All Song Type' ? this.t('songbook.allSongType') : type;
+  }
+
   private async loadSongs(): Promise<void> {
     try {
       const { songs, total } = await this.dataService.getSongs();
       this.songs.set(songs);
       this.totalSongs.set(total);
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unable to load songs from Cloudflare.';
+      const message = error instanceof Error ? error.message : this.t('songbook.loadError');
       this.errorMessage.set(message);
     } finally {
       this.isLoading.set(false);

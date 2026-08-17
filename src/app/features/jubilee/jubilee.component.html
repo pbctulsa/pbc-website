@@ -1,0 +1,74 @@
+<main class="jubilee-page">
+  <section class="event-hero" aria-labelledby="event-title">
+    <div class="event-hero-inner">
+      <div class="event-intro">
+        <a class="back-link" routerLink="/">&larr; Back to home</a>
+        <p class="event-kicker">Ebenezer · 25th Anniversary</p>
+        <h1 id="event-title">Peniel Baptist Church Jubilee</h1>
+        <p class="event-lead">Join us as we celebrate 25 years of God&rsquo;s faithfulness.</p>
+        <p class="event-theme">25 years of reaching and teaching with Jesus&rsquo; compassion</p>
+      </div>
+
+      <a class="event-flyer" href="images/25th-anniversary-jubilee.png" target="_blank" aria-label="Open the full-size Jubilee flyer">
+        <img
+          src="images/25th-anniversary-jubilee.png"
+          alt="Peniel Baptist Church 25th Anniversary Jubilee flyer"
+        >
+      </a>
+    </div>
+  </section>
+
+  <section class="page-section event-information">
+    <div class="section-inner">
+      <p class="eyebrow">Celebration details</p>
+      <h2 class="section-title">All are welcome</h2>
+      <p class="lead">We invite our church family, friends, and community to gather with us for this special milestone.</p>
+
+      <div class="detail-grid">
+        <article class="detail-card">
+          <span>Date</span>
+          <h3>Sunday, October 4, 2026</h3>
+        </article>
+        <article class="detail-card">
+          <span>Time</span>
+          <h3>12:00 PM CDT</h3>
+        </article>
+        <article class="detail-card">
+          <span>Place</span>
+          <h3>Peniel Baptist Church</h3>
+          <p>2140 S. 67th East Ave<br>Tulsa, OK 74129</p>
+        </article>
+      </div>
+
+      <div class="event-actions">
+        <a
+          class="button-link"
+          href="https://www.google.com/maps/dir/?api=1&amp;destination=2140+S+67th+East+Ave,+Tulsa,+OK+74129"
+          target="_blank"
+          rel="noreferrer"
+        >Get directions</a>
+        <a class="button-link secondary" href="images/25th-anniversary-jubilee.png" download>Download flyer</a>
+        <a class="button-link secondary" routerLink="/contact">Contact us</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section scripture-section">
+    <div class="section-inner scripture-inner">
+      <div>
+        <p class="eyebrow">Our anniversary scripture</p>
+        <blockquote>&ldquo;Thus far the Lord has helped us.&rdquo;</blockquote>
+        <cite>1 Samuel 7:12</cite>
+      </div>
+      <div class="watch-card">
+        <p class="eyebrow">Can&rsquo;t join in person?</p>
+        <h2>Watch the celebration live</h2>
+        <p>The Jubilee will be available on the church&rsquo;s Facebook and YouTube channels.</p>
+        <div class="watch-actions">
+          <a class="button-link" [href]="church.links.youtube" target="_blank" rel="noreferrer">Watch on YouTube</a>
+          <a class="button-link secondary" [href]="church.links.facebook" target="_blank" rel="noreferrer">Watch on Facebook</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

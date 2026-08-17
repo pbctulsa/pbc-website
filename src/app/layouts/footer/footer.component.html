@@ -6,24 +6,24 @@
     </section>
 
     <section class="footer-services">
-      <h2>Service Times</h2>
+      <h2>{{ t('contact.serviceTimes') }}</h2>
       <div *ngFor="let service of church.serviceTimes" class="service-item">
-        <span>{{ service.label }}</span>
+        <span>{{ serviceLabel(service.label) }}</span>
         <strong>{{ service.time }}</strong>
       </div>
     </section>
 
     <section>
-      <h2>Connect</h2>
-      <a routerLink="/contact">Contact Us</a>
-      <a routerLink="/sermons">Sermons</a>
-      <a routerLink="/songbook">Songbook</a>
-      <a [href]="church.links.bylaws" target="_blank" rel="noreferrer">Bylaws</a>
-      <a [href]="church.links.giving" target="_blank" rel="noreferrer">Give Online</a>
+      <h2>{{ t('home.connect') }}</h2>
+      <a routerLink="/contact">{{ t('footer.contactUs') }}</a>
+      <a routerLink="/sermons">{{ t('nav.sermons') }}</a>
+      <a routerLink="/songbook">{{ t('nav.songbook') }}</a>
+      <a [href]="church.links.bylaws" target="_blank" rel="noreferrer">{{ t('nav.bylaws') }}</a>
+      <a [href]="church.links.giving" target="_blank" rel="noreferrer">{{ t('home.giveOnline') }}</a>
     </section>
 
     <section>
-      <h2>Follow</h2>
+      <h2>{{ t('footer.follow') }}</h2>
       <a *ngFor="let link of church.socialLinks" [href]="link.url" target="_blank" rel="noreferrer">
         {{ link.label }}
       </a>
@@ -31,6 +31,6 @@
   </div>
 
   <div class="footer-bottom">
-    <p>&copy; {{ currentYear }} {{ church.name }}. All rights reserved.</p>
+    <p>&copy; {{ currentYear }} {{ church.name }}. {{ t('footer.rights') }}</p>
   </div>
 </footer>

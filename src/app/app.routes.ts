@@ -7,6 +7,11 @@ export const routes: Routes = [
     title: 'Home | PBC'
   },
   {
+    path: 'jubilee',
+    loadComponent: () => import('./features/jubilee/jubilee.component').then((m) => m.JubileeComponent),
+    title: '25th Anniversary Jubilee | PBC'
+  },
+  {
     path: 'songbook',
     loadComponent: () => import('./features/songbook/songbook.component').then((m) => m.SongbookComponent),
     title: 'Songbook | PBC'
