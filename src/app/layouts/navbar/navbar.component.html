@@ -50,15 +50,6 @@
     </ul>
 
     <div class="nav-actions">
-      <button
-        class="language-toggle"
-        type="button"
-        [attr.aria-label]="t('language.toggleLabel')"
-        (click)="toggleLanguage()"
-      >
-        <span [class.active]="languageService.language() === 'en'">{{ t('language.english') }}</span>
-        <span [class.active]="languageService.language() === 'tcz'">{{ t('language.thadou') }}</span>
-      </button>
       <a class="give-link" [href]="church.links.giving" target="_blank" rel="noreferrer">{{ t('nav.give') }}</a>
     </div>
   </nav>
