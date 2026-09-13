@@ -1,7 +1,7 @@
 <section class="privacy-hero">
   <div class="privacy-shell">
-    <a class="back-link" routerLink="/songbook" aria-label="Back to PBC Songbook">
-      <span aria-hidden="true">&#8592;</span> PBC Songbook
+    <a class="back-link" routerLink="/songbookapp" aria-label="Back to PBC Songbook app information">
+      <span aria-hidden="true">&#8592;</span> PBC Songbook App
     </a>
     <p class="eyebrow">Privacy Policy</p>
     <h1>Your songs, without the surveillance.</h1>
@@ -35,15 +35,15 @@
     <aside aria-label="Privacy policy contents">
       <p>On this page</p>
       <nav>
-        <a href="privacy#scope">Scope</a>
-        <a href="privacy#information">Information we handle</a>
-        <a href="privacy#use">How we use information</a>
-        <a href="privacy#sharing">How information is shared</a>
-        <a href="privacy#retention">Retention and choices</a>
-        <a href="privacy#children">Children</a>
-        <a href="privacy#security">Security</a>
-        <a href="privacy#changes">Changes</a>
-        <a href="privacy#contact">Contact us</a>
+        <a href="songbookapp/privacy#scope">Scope</a>
+        <a href="songbookapp/privacy#information">Information we handle</a>
+        <a href="songbookapp/privacy#use">How we use information</a>
+        <a href="songbookapp/privacy#sharing">How information is shared</a>
+        <a href="songbookapp/privacy#retention">Retention and choices</a>
+        <a href="songbookapp/privacy#children">Children</a>
+        <a href="songbookapp/privacy#security">Security</a>
+        <a href="songbookapp/privacy#changes">Changes</a>
+        <a href="songbookapp/privacy#contact">Contact us</a>
       </nav>
     </aside>
 
@@ -176,6 +176,7 @@
         <address>
           <strong>{{ church.name }}</strong><br>
           {{ church.address }}<br>
+          <a href="mailto:info@pbctulsa.org">info&#64;pbctulsa.org</a><br>
           <a [href]="'tel:' + church.phone">{{ church.phone }}</a>
         </address>
         <a class="contact-link" routerLink="/contact">Open our contact page <span aria-hidden="true">&#8594;</span></a>

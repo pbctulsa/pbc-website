@@ -73,8 +73,18 @@ export const routes: Routes = [
   },
   {
     path: 'privacy',
+    redirectTo: 'songbookapp/privacy',
+    pathMatch: 'full'
+  },
+  {
+    path: 'songbookapp',
+    loadComponent: () => import('./features/songbook-app/songbook-app.component').then((m) => m.SongbookAppComponent),
+    title: 'PBC Songbook App'
+  },
+  {
+    path: 'songbookapp/privacy',
     loadComponent: () => import('./features/privacy/privacy.component').then((m) => m.PrivacyComponent),
-    title: 'Privacy Policy | PBC Songbook'
+    title: 'Privacy Policy | PBC Songbook App'
   },
   {
     path: 'sermons',
