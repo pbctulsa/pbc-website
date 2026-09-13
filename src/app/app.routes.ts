@@ -17,9 +17,14 @@ export const routes: Routes = [
     title: 'Songbook | PBC'
   },
   {
-    path: 'songbook/privacy',
+    path: 'songbookapp/privacy',
     loadComponent: () => import('./features/songbook/songbook-privacy.component').then((m) => m.SongbookPrivacyComponent),
     title: 'PBC Songbook Privacy Policy | PBC'
+  },
+  {
+    path: 'songbook/privacy',
+    redirectTo: 'songbookapp/privacy',
+    pathMatch: 'full'
   },
   {
     path: 'songbook/:id',
