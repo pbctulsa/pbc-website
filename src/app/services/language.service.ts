@@ -156,6 +156,7 @@ const translations = {
     'bylaws.viewPdf': 'View PDF',
     'bylaws.download': 'Download Bylaws',
     'footer.contactUs': 'Contact Us',
+    'footer.privacy': 'Privacy Policy',
     'footer.follow': 'Follow',
     'footer.rights': 'All rights reserved.'
   },
@@ -295,6 +296,7 @@ const translations = {
     "bylaws.viewPdf": "PDF en-in",
     "bylaws.download": "Dan-le-thupeh download-in",
     "footer.contactUs": "Be-ding",
+    "footer.privacy": "Privacy Policy",
     "footer.follow": "Zui-in",
     "footer.rights": "A-kim-a-kim-a kiven-ahi."
   }

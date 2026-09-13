@@ -72,6 +72,11 @@ export const routes: Routes = [
     title: 'Contact | PBC'
   },
   {
+    path: 'privacy',
+    loadComponent: () => import('./features/privacy/privacy.component').then((m) => m.PrivacyComponent),
+    title: 'Privacy Policy | PBC Songbook'
+  },
+  {
     path: 'sermons',
     loadComponent: () => import('./features/sermons/sermons.component').then((m) => m.SermonsComponent),
     title: 'Sermons | PBC'
