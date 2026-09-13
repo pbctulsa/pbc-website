@@ -1,0 +1,170 @@
+<section class="privacy-hero">
+  <div class="privacy-shell">
+    <a class="back-link" routerLink="/" aria-label="Back to Peniel Baptist Church">
+      <span aria-hidden="true">&#8592;</span> Peniel Baptist Church
+    </a>
+    <p class="eyebrow">Privacy Policy</p>
+    <h1>Scripture stays with you. Your data does too.</h1>
+    <p class="hero-copy">
+      PBC Thadou Kuki Bible works offline without an account. We do not collect your personal
+      information, use analytics, show third-party ads, or track you across apps and websites.
+    </p>
+    <p class="effective-date">Effective September 13, 2026</p>
+
+    <div class="privacy-highlights" aria-label="Privacy highlights">
+      <article>
+        <span class="highlight-icon" aria-hidden="true">01</span>
+        <div>
+          <h2>Offline by design</h2>
+          <p>The complete Bible edition is bundled with the app; no account or download is needed.</p>
+        </div>
+      </article>
+      <article>
+        <span class="highlight-icon" aria-hidden="true">02</span>
+        <div>
+          <h2>No data collected</h2>
+          <p>Your reading activity, bookmarks, highlights, and preferences remain on your device.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="privacy-body">
+  <div class="privacy-layout">
+    <aside aria-label="Privacy policy contents">
+      <p>On this page</p>
+      <nav>
+        <a href="bibleapp/privacy#scope">Scope</a>
+        <a href="bibleapp/privacy#collection">Data collection</a>
+        <a href="bibleapp/privacy#device">Data on your device</a>
+        <a href="bibleapp/privacy#sharing">Sharing and external links</a>
+        <a href="bibleapp/privacy#control">Retention and control</a>
+        <a href="bibleapp/privacy#children">Children</a>
+        <a href="bibleapp/privacy#security">Security</a>
+        <a href="bibleapp/privacy#changes">Changes</a>
+        <a href="bibleapp/privacy#contact">Contact us</a>
+      </nav>
+    </aside>
+
+    <article class="policy">
+      <section id="scope">
+        <span class="section-number">01</span>
+        <h2>Scope</h2>
+        <p>
+          This Privacy Policy explains how {{ church.name }} ("PBC," "we," "us," or "our")
+          handles information in the PBC Thadou Kuki Bible app for iPhone and iPad.
+        </p>
+      </section>
+
+      <section id="collection">
+        <span class="section-number">02</span>
+        <h2>We do not collect personal data</h2>
+        <p>
+          PBC Thadou Kuki Bible does not send personal information or reading activity to PBC. The
+          app has no user accounts, analytics tools, advertising networks, cloud synchronization,
+          or app-operated server. Reading and searching the Bible does not require a network
+          connection.
+        </p>
+
+        <div class="notice-box">
+          <strong>What the app does not request</strong>
+          <p>
+            The app does not request access to your location, contacts, photos, camera, microphone,
+            health information, payment information, or advertising identifier.
+          </p>
+        </div>
+      </section>
+
+      <section id="device">
+        <span class="section-number">03</span>
+        <h2>Information stored on your device</h2>
+        <p>
+          The app saves your bookmarks, verse highlights, most recent reading position, text-size
+          preference, and appearance preference locally on your device. PBC cannot access this
+          information. It is used only to provide the features you choose and to restore your app
+          experience when you return.
+        </p>
+      </section>
+
+      <section id="sharing">
+        <span class="section-number">04</span>
+        <h2>Sharing and external services</h2>
+        <h3>Sharing a verse</h3>
+        <p>
+          When you choose to share a verse, the app opens Apple's standard iOS sharing controls.
+          You decide which person, app, or service receives the text. Any service you select handles
+          that information under its own privacy policy; PBC does not receive a copy.
+        </p>
+
+        <h3>External links</h3>
+        <p>
+          The app contains optional links to PBC websites and Apple Books. These links open only
+          when you select them. Apple, your browser, and the destination website may process
+          standard connection information under their own privacy policies. Those services are not
+          part of the Bible app's offline reading experience.
+        </p>
+
+        <p>
+          Apple may independently process App Store, device, crash, or diagnostic information based
+          on your device and privacy settings. PBC does not control Apple's processing of that data.
+        </p>
+      </section>
+
+      <section id="control">
+        <span class="section-number">05</span>
+        <h2>Retention and your control</h2>
+        <p>
+          Because PBC does not collect or store your app data, we have no personal app data to retain,
+          access, sell, or delete. You control the bookmarks, highlights, reading position, and
+          preferences stored on your device. Removing the app deletes its locally stored data,
+          subject to any device backups managed through your Apple account and settings.
+        </p>
+      </section>
+
+      <section id="children">
+        <span class="section-number">06</span>
+        <h2>Children's privacy</h2>
+        <p>
+          The app is suitable for a general audience and does not knowingly collect personal
+          information from children. Its Bible content and reading features work without an account
+          or the submission of personal information.
+        </p>
+      </section>
+
+      <section id="security">
+        <span class="section-number">07</span>
+        <h2>Security</h2>
+        <p>
+          Keeping reading data on your device limits its exposure. Your device passcode, operating
+          system security, backup settings, and the security of any service you choose through the
+          iOS share sheet also affect the protection of information on your device.
+        </p>
+      </section>
+
+      <section id="changes">
+        <span class="section-number">08</span>
+        <h2>Changes to this policy</h2>
+        <p>
+          We may update this policy if the app, our practices, or legal requirements change. We will
+          post the revised policy here and update the effective date above. If a future app version
+          begins collecting data, we will update this policy and the app's privacy details before
+          that collection begins.
+        </p>
+      </section>
+
+      <section id="contact" class="contact-card">
+        <span class="section-number">09</span>
+        <h2>Contact us</h2>
+        <p>Questions about this policy can be directed to:</p>
+        <address>
+          <strong>{{ church.name }}</strong><br>
+          {{ church.address }}<br>
+          <a href="mailto:info@pbctulsa.org">info&#64;pbctulsa.org</a><br>
+          <a [href]="'tel:' + church.phone">{{ church.phone }}</a>
+        </address>
+        <a class="contact-link" routerLink="/contact">Open our contact page <span aria-hidden="true">&#8594;</span></a>
+      </section>
+    </article>
+  </div>
+</section>

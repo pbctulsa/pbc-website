@@ -97,6 +97,11 @@ export const routes: Routes = [
     title: 'Privacy Policy | PBC Songbook App'
   },
   {
+    path: 'bibleapp/privacy',
+    loadComponent: () => import('./features/bible-app-privacy/bible-app-privacy.component').then((m) => m.BibleAppPrivacyComponent),
+    title: 'Privacy Policy | PBC Thadou Kuki Bible'
+  },
+  {
     path: 'sermons',
     loadComponent: () => import('./features/sermons/sermons.component').then((m) => m.SermonsComponent),
     title: 'Sermons | PBC'
