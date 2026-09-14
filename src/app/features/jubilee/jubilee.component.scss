@@ -131,6 +131,67 @@
   gap: 0.75rem;
 }
 
+.expectations-section {
+  background: var(--color-blue-900);
+  color: var(--color-white);
+}
+
+.expectations-section .eyebrow {
+  color: #ffbdc2;
+}
+
+.expectations-section .section-title {
+  color: var(--color-white);
+}
+
+.expectations-section .lead {
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.expectations-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 2rem;
+  gap: 1rem;
+}
+
+.expectation-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  min-height: 12rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0.5rem;
+  padding: 1.35rem;
+  background: rgba(255, 255, 255, 0.07);
+  gap: 1rem;
+}
+
+.expectation-number {
+  display: grid;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  place-items: center;
+  background: var(--color-red-700);
+  color: var(--color-white);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.expectation-card h3 {
+  margin: 0;
+  color: var(--color-white);
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+
+.expectation-card p {
+  margin: 0.6rem 0 0;
+  color: rgba(255, 255, 255, 0.72);
+}
+
 .scripture-section {
   background: var(--color-white);
 }
@@ -205,6 +266,14 @@ cite {
 
   .detail-grid {
     grid-template-columns: 1fr;
+  }
+
+  .expectations-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .expectation-card {
+    min-height: 0;
   }
 }
 
