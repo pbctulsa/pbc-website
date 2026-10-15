@@ -8,8 +8,8 @@ export const routes: Routes = [
   },
   {
     path: 'jubilee',
-    loadComponent: () => import('./features/jubilee/jubilee.component').then((m) => m.JubileeComponent),
-    title: '25th Anniversary Jubilee | PBC'
+    redirectTo: '',
+    pathMatch: 'full'
   },
   {
     path: 'songbook',
