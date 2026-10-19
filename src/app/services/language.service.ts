@@ -10,6 +10,7 @@ const translations = {
     'language.toggleLabel': 'Language',
     'language.english': 'English',
     'language.thadou': 'Thadou',
+    'nav.events': 'Events',
     'nav.home': 'Home',
     'nav.about': 'About',
     'nav.whoWeAre': 'Who We Are',
@@ -161,6 +162,7 @@ const translations = {
     'footer.rights': 'All rights reserved.'
   },
   tcz: {
+    "nav.events": "Events",
     "language.toggleLabel": "Sapao",
     "language.english": "English",
     "language.thadou": "Thadou",

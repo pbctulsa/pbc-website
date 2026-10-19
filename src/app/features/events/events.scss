@@ -1,0 +1,38 @@
+.events-intro { background: var(--color-surface); }
+h2, h3 { color: var(--color-blue-900); font-family: var(--font-serif); line-height: 1.2; }
+h2 { margin: 0 0 1rem; font-size: 2rem; }
+h3 { margin: 0 0 0.75rem; font-size: 1.6rem; }
+p { margin: 0 0 1rem; }
+.event-card { display: grid; grid-template-columns: 9rem minmax(0, 1fr); border: 1px solid var(--color-border); border-radius: 0.6rem; overflow: hidden; box-shadow: var(--shadow-soft); }
+.date-block { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem 1rem; background: var(--color-blue-900); color: white; }
+.date-block span { font-weight: 700; font-size: 0.8rem; letter-spacing: 0.1em; }
+.date-block strong { font-family: var(--font-serif); font-size: 4rem; line-height: 1.3; }
+.card-copy { padding: clamp(1.25rem, 3vw, 2rem); }
+.card-copy h3 { font-size: 2.1rem; }
+.card-copy .eyebrow { font-size: 0.8rem; }
+.visit-note { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--color-border); }
+.event-hero { background: var(--color-blue-900); color: white; }
+.event-hero .eyebrow { color: #ffccd0; }
+.event-hero h1 { margin: 0 0 0.5rem; font-family: var(--font-serif); font-size: clamp(2.7rem, 6vw, 4.5rem); line-height: 1.1; }
+.event-hero p { max-width: 42rem; }
+.event-subtitle { font-size: clamp(1.5rem, 3vw, 2rem); }
+.back-link { display: inline-block; margin-bottom: 2rem; }
+.detail-grid { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 3rem; align-items: start; }
+.expect-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+.expect-grid article { border-top: 3px solid var(--color-red-700); padding-top: 1rem; }
+.donation-box { margin: 2rem 0; padding: 1.5rem; background: var(--color-surface); border-radius: 0.5rem; }
+.event-facts { padding: 1.5rem; border: 1px solid var(--color-border); border-radius: 0.5rem; background: var(--color-surface); }
+dl { margin: 0 0 1.5rem; }
+dt { margin-top: 1rem; color: var(--color-red-700); font-weight: 700; }
+dd { margin: 0; }
+dd small { display: block; font-size: 0.95rem; }
+.ministry-link { display: block; margin-top: 1rem; }
+.past-notice { padding: 1rem; border: 1px solid white; }
+@media (max-width: 760px) {
+  .detail-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .event-facts { grid-row: 1; }
+  .event-card { grid-template-columns: 1fr; }
+  .date-block { flex-direction: row; gap: 1rem; padding: 0.75rem; }
+  .date-block strong { font-size: 2.25rem; }
+  .expect-grid { grid-template-columns: 1fr; }
+}

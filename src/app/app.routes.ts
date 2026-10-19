@@ -2,6 +2,16 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: 'events',
+    loadComponent: () => import('./features/events/events.component').then(m => m.EventsComponent),
+    title: 'Upcoming Events | PBC'
+  },
+  {
+    path: 'events/mission-outreach',
+    loadComponent: () => import('./features/events/outreach.component').then(m => m.OutreachComponent),
+    title: 'Mission Outreach — Free Lunch & Clothes | PBC'
+  },
+  {
     path: '',
     loadComponent: () => import('./features/home/home.component').then((m) => m.HomeComponent),
     title: 'Home | PBC'

@@ -44,6 +44,7 @@ export class NavbarComponent {
         { labelKey: 'nav.children', path: '/ministries/children' }
       ]
     },
+    { labelKey: 'nav.events', path: '/events' },
     { labelKey: 'nav.sermons', path: '/sermons' },
     { labelKey: 'nav.songbook', path: '/songbook' },
     { labelKey: 'nav.contact', path: '/contact' }
