@@ -1,47 +1,3 @@
-<section class="outreach" aria-labelledby="outreach-title">
-  <div class="outreach-inner">
-    <div class="outreach-copy">
-      <p class="outreach-kicker">Peniel Baptist Church · Mission Outreach</p>
-      <h1 id="outreach-title">Free lunch &amp; clothes</h1>
-      <p class="outreach-intro">Join us for a one-day outreach serving individuals and families in our community. All are welcome!</p>
-
-      <div class="outreach-details" aria-label="Mission Outreach event details">
-        <div>
-          <span>Date</span>
-          <strong>Saturday, November 7, 2026</strong>
-        </div>
-        <div>
-          <span>Time</span>
-          <strong>10:00 AM–2:00 PM</strong>
-        </div>
-        <div>
-          <span>Location</span>
-          <strong>Peniel Baptist Church</strong>
-          <small>2140 S 67th E Ave., Tulsa, OK 74129</small>
-        </div>
-      </div>
-
-      <div class="outreach-actions">
-        <a class="button-link outreach-primary" routerLink="/events/mission-outreach">View event details</a>
-        <a
-          class="button-link outreach-secondary"
-          href="https://www.google.com/maps/dir/?api=1&amp;destination=2140+S+67th+East+Ave,+Tulsa,+OK+74129"
-          target="_blank"
-          rel="noreferrer"
-        >Get directions</a>
-        <a class="button-link outreach-secondary" routerLink="/ministries/mission">Mission Ministry</a>
-      </div>
-    </div>
-
-    <aside class="outreach-donations" aria-labelledby="donations-title">
-      <p class="outreach-kicker">Help our community</p>
-      <h2 id="donations-title">Clothing donations now open</h2>
-      <p>Church members are encouraged to begin donating clothes now to help individuals and families in our community.</p>
-      <a class="button-link outreach-secondary" routerLink="/contact">Contact the church</a>
-    </aside>
-  </div>
-</section>
-
 <section class="hero">
   <div class="hero-background" aria-hidden="true">
     <img
@@ -54,7 +10,7 @@
 
   <div class="hero-inner">
     <p class="eyebrow">{{ t('home.welcome') }}</p>
-    <h2>{{ church.name }}</h2>
+    <h1>{{ church.name }}</h1>
     <p>
       {{ t('home.motto') }}
     </p>
